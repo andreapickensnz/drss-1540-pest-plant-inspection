@@ -232,6 +232,7 @@ body.spec-off .part-removed { display: none; }
 
 .field { display: flex; flex-direction: column; gap: var(--ds-field-gap); margin-bottom: var(--ds-field-margin); }
 .label { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.field-help { margin: 2px 0 8px; color: #5c6b7a; font-size: 13px; line-height: 1.4; }
 .label-text { font-size: var(--ds-label-font); font-weight: 700; color: var(--caption); line-height: 1.2; }
 .req { color: var(--pink); font-weight: 700; }
 
@@ -1347,7 +1348,7 @@ body.record .ds-toggle-label { font-size: 13px; color: #1c1c1d; }
 	<div class="mock-banner">
 		<strong data-doc-title>DRSS-1540 Pest Plant Inspection</strong>
 		<span class="doc-surface" data-doc-surface>Datascape</span>
-		<span>Local mock of the <a href="https://datacomgroup.atlassian.net/browse/DRSS-1540">DRSS-1540</a> April 2026 changes to an existing survey. Not the live app, no database, nothing posted to ADO.</span>
+		<span>Local mock of the Pest Plant Inspection survey already built in Datascape, plus the four changes in <a href="https://datacomgroup.atlassian.net/browse/DRSS-1540">DRSS-1540</a>. Not the live app.</span>
 		<span class="links">
 			<label class="spec-switch"><input type="checkbox" id="spec-toggle" autocomplete="off" /> Spec notes</label>
 		</span>
@@ -1419,24 +1420,21 @@ body.record .ds-toggle-label { font-size: 13px; color: #1c1c1d; }
 /*
 	DRSS-1540 Pest Plant Inspection.
 
-	Built to the April 2026 layout as revised through 10 August 2026
-	("DRSS-1540 Pest Plant Inspection Survey Layout April 2026-4.xlsx"),
-	the 15 May 2026 retest, and the DRSS-1540 comments through 11 August 2026.
-	Where the retest and the April sheet disagree on order or wording, the retest
-	wins. The 11 August comment locks the reason-for-inspection list and the
-	future-booking question. Field detail and GIS attributes come from the
-	April workbook, including the Target Species row added on 10 August.
+	The survey is already built in Datascape. This prototype follows that form,
+	as shown on surveys 7802 and 8414, plus the four changes in Halema Jamieson's
+	comment on 28 October 2026. It does not rebuild the April layout.
 
-	The survey already exists in Datascape: SurveyType INFEST "Pest Plant Infestation
-	Inspection", the infestation fine scale point custom inputs, and the location types
-	InfestationRecords, InfestationFineScalePoints, SprayDiary and
-	RegisterRecordLocationPLCPLNInfestationParentPoint.
+	The four changes:
+		1. Pest Plant Inspection Actions — title and help text of Incident Inspection Required
+		2. Pest Plant Inspection — Target species, after Reason for Inspection
+		   (the yellow row in the April layout)
+		3. Search Area location type renamed to Area Searched
+		4. Environmental Weed fine scale point, point and polygon removed
 
 	origin values:
-		existing   - already built
-		new        - added by the April sheet or the May retest
-		wording    - rename, new options or changed values
-		toLocation - moves off the survey onto the GIS location record
+		existing   - already on the built survey
+		new        - added by the 28 October comment
+		wording    - rename or help text on a field that is already there
 */
 window.PESTPLANT_SURVEY = {
 	meta: {
@@ -1445,646 +1443,262 @@ window.PESTPLANT_SURVEY = {
 		jiraUrl: "https://datacomgroup.atlassian.net/browse/DRSS-1540",
 		surveyType: "Pest Plant Infestation Inspection",
 		shortCode: "SVINF.3312",
-		job: "JRB.7455 · Pest Plant Inspection",
-		property: "Bendigo Station, Tarras",
+		job: "Pest Plant Inspection",
+		property: "Pest Plant Inspection - 7802",
 		officer: "H. Giles",
 		council: "ORC",
 		csv: "DRSS-1540 Pest Plant Inspection Survey Layout April 2026-4.xlsx",
-
-		// Source: #DRSS 3979 - Master List ... All Business Functions-2.xlsx, read 13 Oct 2026.
-		// Surveys sheet: active, Ready for Datacom, ad hoc, Biosecurity job, location capture on the survey.
-		routing: "It is already on the booking when the master list marks it as the default: Biosecurity Control, Monitoring or Inspection with subtype Pest Plant, and Proactive Surveillance for Pest Plant or All pests. The officer adds it with Add Part on Biosecurity Control, Monitoring or Inspection when the subtype is All Pests. It is also available ad hoc on a Biosecurity job. The Proactive Surveillance / Pest Animals line is marked on the master as a typo and is not used. On the Incidents sheet the same booking is listed under the name Pest Inspection.",
-
 		readerNotes: [
 			{
-				heading: "This survey already exists.",
-				text: "SurveyType INFEST “Pest Plant Infestation Inspection” is in the Datascape configuration today, along with the infestation fine scale point custom inputs and the infestation location types. Fields marked Existing are already built; the chips show what changes."
+				heading: "This is the survey already built.",
+				text: "Halema Jamieson, 28 October 2026: do not rebuild the survey. The form below is the one that was tested. Only the four marked changes are new."
 			},
 			{
-				heading: "Open questions are flagged in red.",
-				text: "Where a list, a rule or a rename is unresolved, the field carries that question rather than an invented answer."
+				heading: "The yellow row is Target species.",
+				text: "In the April layout spreadsheet, Target species is the row highlighted yellow. It is a species-library look-up, more than one species, placed after Reason for Inspection and before Property Inspected."
 			}
 		]
 	},
-
 	parts: [
 		{
-			name: "Timesheet Start Date",
-			origin: "existing",
-			fields: [
-				{ id: "startDate", label: "Actual Start Date", type: "date", value: "2026-09-28", mandatory: true, origin: "existing", detail: "Same as all other surveys", mapsTo: "JRB - Actual date/time" },
-				{ id: "startTime", label: "Actual Start Time", type: "time", value: "08:20", mandatory: true, origin: "existing", detail: "Same as all other surveys", mapsTo: "JRB - Actual date/time" }
-			]
-		},
-		{
-			name: "Assets and Inventory",
-			origin: "existing",
-			fields: [
-				{ id: "addAsset", label: "Add Asset", type: "action", origin: "existing", detail: "Same as all other surveys", mapsTo: "JRB" },
-				{ id: "addInventory", label: "Add Inventory", type: "action", origin: "existing", detail: "Same as all other surveys", mapsTo: "JRB" }
-			]
-		},
-		{
-			name: "General Visual Evidence",
-			origin: "existing",
-			fields: [
-				{ id: "photos", label: "Photos", type: "media", media: "photo", origin: "existing", detail: "Same as all other surveys", mapsTo: "JRB - Documents" },
-				{ id: "videos", label: "Videos", type: "media", media: "video", origin: "existing", detail: "Same as all other surveys", mapsTo: "JRB - Documents" },
-				{ id: "trackLog", label: "Track Log", type: "spatial", geometry: "Track log", origin: "existing", detail: "Same as all other surveys", mapsTo: "JRB - Documents" }
-			]
-		},
-		{
 			name: "Weather",
-			origin: "existing",
 			fields: [
-				{ id: "captureWeather", label: "Capture Weather", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing", detail: "Same as all other surveys" }
-			],
-			sections: [
-				{
-					name: "Weather Variables",
-					conditionText: "IF Capture Weather = Yes",
-					showWhen: { field: "captureWeather", equals: "Yes" },
-					fields: [
-						{ id: "airTemp", label: "Air Temperature", type: "text", origin: "existing", detail: "Shared weather list used by every survey." },
-						{ id: "cloudCover", label: "Cloud Cover", type: "text", origin: "existing" },
-						{ id: "rainfall", label: "Rainfall", type: "text", origin: "existing" },
-						{ id: "windDirection", label: "Wind Direction", type: "text", origin: "existing" },
-						{ id: "otherWeather", label: "Other Weather Conditions", type: "textarea", origin: "existing" }
-					]
-				}
+				{ id: "captureWeather", label: "Capture Weather?", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" }
+			]
+		},
+		{
+			name: "In Attendance",
+			fields: [
+				{ id: "inAttendance", label: "In Attendance", type: "textarea", origin: "existing" }
+			]
+		},
+		{
+			name: "Authority",
+			fields: [
+				{ id: "warrantShown", label: "Warrant Shown", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" }
 			]
 		},
 		{
 			name: "Pest Plant Inspection",
-			sections: [
-				{
-					name: "Officer",
-					origin: "new",
-					fields: [
-						{
-							id: "primaryOfficer",
-							label: "Primary Officer",
-							type: "lookup",
-							lookupOf: "Officer",
-							mandatory: true,
-							origin: "new",
-							detail: "Pre-populated from the Officer on the incident, or whoever is signed into the Fieldwork app. Can be overwritten.",
-							mapsTo: "JRB - Primary Officer",
-							card: {
-								title: "H. Giles",
-								lines: [
-									["Role", "Biosecurity Officer"],
-									["Council", "Otago Regional Council"]
-								]
-							}
-						},
-						{ id: "inAttendance", label: "In Attendance", type: "multilookup", lookupOf: "Officer", origin: "new", detail: "Look up, select multi. Look up list of officers.", mapsTo: "JRB - Officer" }
-					]
-				},
-				{
-					name: "Authority",
-					fields: [
-						{ id: "warrantShown", label: "Warrant Shown", type: "boolean", options: ["Yes", "No"], value: "No", mandatory: true, origin: "existing", detail: "Same as other surveys." }
-					],
-					repeaters: [
-						{
-							id: "warrantShownTo",
-							name: "Warrant Shown to",
-							addText: "Add",
-							platform: {
-								lead: "Platform limitation:",
-								text: "On the Fieldwork app this block is drawn at the very bottom of the form. On the Datascape desktop it stays where it is."
-							},
-							conditionText: "IF Warrant Shown = Yes",
-							showWhen: { field: "warrantShown", equals: "Yes" },
-							origin: "new",
-							detail: "Information only. Does not become a linked contact.",
-							fields: [
-								{
-									id: "warrantContact",
-									label: "Warrant shown to Name (lookup Contact)",
-									type: "lookup",
-									lookupOf: "Contact",
-									origin: "wording",
-									detail: "Renamed at the retest so the two “Warrant Shown to Name” fields can be told apart."
-								},
-								{ id: "warrantName", label: "Warrant Shown to Name", type: "text", mandatory: true, origin: "new" },
-								{ id: "warrantRelationship", label: "Warrant Shown to Relationship", type: "text", origin: "new" }
-							]
-						}
-					]
-				},
-				{
-					name: "Contact",
-					origin: "wording",
-					decision: "Moved here at the retest — the + Contact widget now sits directly after Warrant Shown to, rather than in its own part further down the form.",
-					repeaters: [
-						{
-							id: "contacts",
-							name: "Contact",
-							addText: "+ Contact",
-							platform: {
-								lead: "Platform limitation:",
-								text: "On the Fieldwork app this block is drawn at the very bottom of the form. On the Datascape desktop it stays where it is."
-							},
-							origin: "existing",
-							detail: "Contact look up available here to expand and use if required.",
-							fields: [
-								{ id: "contactSearch", label: "Contact Search", type: "lookup", lookupOf: "Contact", origin: "existing" },
-								{
-									id: "contactRelationship",
-									label: "Relationship Type",
-									type: "lookup",
-									lookupOf: "Relationship type",
-									options: [
-										"Alleged Offender",
-										"Associated Landowner",
-										"Authorisation Holder",
-										"Community Group",
-										"Environmental Manager",
-										"Farm Manager",
-										"Iwi Hapu Groups",
-										"Key Decision Maker(KDM)",
-										"Leaseholder",
-										"Lessee",
-										"Occupier",
-										"Plan Contact",
-										"Plan Holder",
-										"Property Owner"
-									],
-									origin: "existing",
-									conditionText: "IF Contact Search = [Contact name] selected",
-									showWhen: { field: "contactSearch", filled: true },
-									detail: "Same lookup select as Compliance Inspection. The compliance sheet says this looks up every available relationship type, in alphabetical order, and cannot be filtered per survey."
-								}
-							]
-						},
-						{
-							id: "contactMgmt",
-							name: "Contact Management request",
-							addText: "Add request",
-							platform: {
-								lead: "Platform limitation:",
-								text: "On the Fieldwork app this block is drawn at the very bottom of the form. On the Datascape desktop it stays where it is."
-							},
-							origin: "new",
-							detail: "Standard as per other surveys, available here to expand and use if required.",
-							fields: [
-								{ id: "contactMgmtDetail", label: "Request", type: "textarea", origin: "new" }
-							]
-						}
-					]
-				},
-				{
-					name: "Inspection Details",
-					fields: [
-						{
-							id: "reason",
-							label: "Reason for Inspection",
-							type: "select",
-							options: [
-								{ label: "Proactive surveillance" },
-								{ label: "Enquiry or Request", origin: "wording" },
-								{ label: "Complaint" },
-								{ label: "Reinspection" },
-								{ label: "Nursery Inspection", origin: "new" }
-							],
-							value: "Proactive surveillance",
-							mandatory: true,
-							origin: "wording",
-							detail: "The five options on the April sheet. On 11 August 2026 the retest passed: Landowner/Occupier Request and Re-inspection (Monitoring Inspection) no longer appear."
-						},
-						{
-							id: "targetSpecies",
-							label: "Target Species",
-							type: "multilookup",
-							lookupOf: "Species",
-							origin: "new",
-							detail: "Species library look-up. Multiple selection. Added after the Datacom / RSHL session on 10 Aug 2026."
-						},
-						{
-							id: "propertyInspected",
-							label: "Was the property inspected?",
-							type: "boolean",
-							options: ["Yes", "No"],
-							value: "Yes",
-							origin: "wording",
-							decision: "Reworded at the retest from “Property not Inspected”, which read as a double negative once the platform defaulted it to No. Answering No ends the survey — every part from Search Details to Biosecurity Notice switches off below. Defaulted to Yes here, because the platform defaults a Boolean to No and on this wording that would mean “not inspected”, ending the survey before the officer touched anything."
-						}
-					],
-					sections: [
-						{
-							name: "Not inspected",
-							conditionText: "IF Was the property inspected? = No",
-							showWhen: { field: "propertyInspected", equals: "No" },
-							fields: [
-								{ id: "notInspectedReason", label: "Reason", type: "textarea", origin: "new", detail: "Why the property could not be inspected." }
-							]
-						}
-					]
-				}
-			]
-		},
-		{
-			name: "Search Details",
-			origin: "new",
-			decision: "New section created at the retest. Search Area and Species Found were previously scattered — the retest groups them here, ahead of Infestation Details.",
-			conditionText: "Hidden once Was the property inspected? = No.",
-			showWhen: { field: "propertyInspected", equals: "Yes" },
 			fields: [
 				{
-					id: "searchArea",
-					label: "Search Area",
+					id: "reason",
+					label: "Reason for Inspection",
+					type: "select",
+					options: [
+						"Proactive Surveillance",
+						"Enquiry or Request",
+						"Complaint",
+						"Reinspection",
+						"Nursery Inspection"
+					],
+					value: "Enquiry or Request",
+					origin: "existing"
+				},
+				{
+					id: "targetSpecies",
+					label: "Target species",
+					type: "multilookup",
+					lookupOf: "Species",
+					origin: "new",
+					detail: "The yellow row in the April layout. Species library, more than one species. Sits after Reason for Inspection and before Property Inspected."
+				},
+				{
+					id: "propertyInspected",
+					label: "Property Inspected",
+					type: "boolean",
+					options: ["Yes", "No"],
+					value: "Yes",
+					mandatory: true,
+					origin: "existing"
+				},
+				{
+					id: "areaSearched",
+					label: "Area Searched",
 					type: "spatial",
-					geometry: "Point, line or polygon",
-					origin: "existing",
-					detail: "Existing Search Area location type.",
-					gis: "4 attributes on the drawn geometry — Target species · Target species found · Label · Notes."
+					geometry: "Polygon",
+					origin: "wording",
+					detail: "Renamed from Search Area. The location type is Area Searched, to match the other pest inspections."
 				},
 				{
 					id: "speciesFound",
 					label: "Species Found",
 					type: "boolean",
 					options: ["Yes", "No"],
-					value: "No",
-					mandatory: true,
-					origin: "wording",
-					decision: "The gate into Infestation Details. No sends the officer to the comments section; Yes opens the per-species block.",
-					detail: "New order and wording. The title in the RSHL requirements reads “Species Present Found”, a half-finished rename."
-				},
-				{ id: "incidentPhotos", label: "Capture Incident Photos", type: "media", media: "both", origin: "existing" }
+					value: "Yes",
+					origin: "existing"
+				}
 			]
 		},
 		{
 			name: "Infestation Details",
-			conditionText: "IF Species Found = Yes",
-			showWhen: { all: [{ field: "propertyInspected", equals: "Yes" }, { field: "speciesFound", equals: "Yes" }] },
-			decision: "The RSHL requirements describe this whole block as a survey item repeater, once per species. It is drawn once here because the repeating controls sit at block level — treat everything below as one species.",
-			platform: "The RSHL requirements make this whole block repeat once per species, and it holds six sub-sections. A section sitting inside a repeating block may be new capability. The Datascape export code has a branch for it, but no shipped configuration uses it. Datascape development and Product to confirm whether it is supported and supportable. The Fieldwork app team to confirm the app renders a section inside a repeating row. The prototype draws the block once so the sub-sections can be read.",
 			sections: [
 				{
-					name: "Species",
+					name: "Infestation Species",
 					fields: [
 						{
 							id: "species",
-							label: "Species Found",
+							label: "Species",
 							type: "lookup",
 							lookupOf: "Species",
-							origin: "wording",
-							card: {
-								title: "Kahili ginger",
-								lines: [
-									["Common name", "Kahili ginger"],
-									["Scientific name", "Hedychium gardnerianum"],
-									["RPMP Status", "Sustained Control"],
-									["NPPA", "True"],
-									["Environmental Weed", "True"]
-								]
-							},
-							detail: "Species library look-up. The retest asks that the RPMP, NPPA and Environmental Weed status show alongside the name or in the species card. On 9 June 2026 the retest passed: the species name now shows on the completed survey after sync."
+							value: "Gorse",
+							origin: "existing"
+						},
+						{ id: "incidentPhotos", label: "Capture Incident Photos", type: "media", media: "photo", origin: "existing" },
+						{
+							id: "captureMethod",
+							label: "Capture Method",
+							type: "multiselect",
+							options: [
+								"Pest Plant Infestation (Fine Scale Point)",
+								"Pest Plant Infestation (Point)",
+								"Pest Plant Infestation (Polygon)"
+							],
+							origin: "existing",
+							decision: "Environmental Weed (Fine Scale Point), Environmental Weed (Point) and Environmental Weed (Polygon) are removed. The three Pest Plant Infestation location types stay."
 						}
 					]
 				},
 				{
-					name: "Infestation locations",
-					detail: "Multiple locations may be captured for each species.",
-					gis: [
-						"The second tab of DRSS-1540 Pest Plant Inspection Survey Layout April 2026-4.xlsx, “Pest Plant Infestation Attribut”, defines what is captured against each geometry once it is drawn. That tab is the destination for every field the Pest Plant Inspection tab marks “attributes now on location”.",
-						"Area of occupancy is calculated, not typed. On the Pest Plant Infestation Attribut tab it is the sum of each count multiplied by that class’s size factor. The classes named there are Adult, Juvenile and Seedling. The size factor is typed in, or filled from the size factor by species look up table when the species is listed there."
-					],
-					question: [
-						"Infestation locations. The requirement crosses out Environmental Weed (fine scale point), Environmental Weed (point) and Environmental Weed (polygon). It is not clear because the attributes list still describes the information each of those three locations would collect. The prototype leaves all three out of Infestation locations. Should they be in the survey?"
-					],
+					name: "Pest Plant Infestation Point",
+					conditionText: "Shown when Capture Method includes Pest Plant Infestation (Point).",
+					showWhen: { field: "captureMethod", includes: "Pest Plant Infestation (Point)" },
 					fields: [
-						{
-							id: "infestFsp",
-							label: "Pest Plant Infestation (FSP)",
-							type: "spatial",
-							geometry: "Fine scale point",
-							origin: "toLocation",
-							gis: "17 attributes on the drawn geometry — Species · Size factor Adult (new) · Size factor Juvenile (new) · Size factor Seedling (new) · Count Adult · Count Juvenile · Count Seedling · EOO (Extent of occurrence) · AOO (Area of occupancy) · Confidence · Control undertaken · Percent Controlled (new) · Control required · Safe to Control · If no, give reason · Specimen collected · Photos."
-						},
 						{
 							id: "infestPoint",
 							label: "Pest Plant Infestation (Point)",
 							type: "spatial",
 							geometry: "Point",
-							origin: "toLocation",
-							gis: "10 attributes on the drawn geometry — Species · AOO (Area of occupancy) (new) · Confidence · Control undertaken · Percent Controlled (new) · Control required · Safe to Control · If no, give reason · Specimen collected · Photos."
-						},
-						{
-							id: "infestPolygon",
-							label: "Pest Plant Infestation (Polygon)",
-							type: "spatial",
-							geometry: "Polygon",
-							origin: "toLocation",
-							gis: "18 attributes on the drawn geometry — Species · Density · Size factor Adult (new) · Size factor Juvenile (new) · Size factor Seedling (new) · Count Adult · Count Juvenile · Count Seedling · EOO (Extent of occurrence) · AOO (Area of occupancy) (new) · Confidence · Control undertaken · Percent Controlled (new) · Control required · Safe to Control · If no, give reason · Specimen collected · Photos."
+							origin: "existing"
 						},
 						{
 							id: "specimenCollected",
 							label: "Specimen Collected",
-							type: "spatial",
-							geometry: "Point",
-							origin: "new",
-							decision: "Added at the retest, agreed at the JIRA drop-in on 18 May 2026: a Specimen Collected location type within Infestation Details.",
-							question: "RSHL to confirm: the geometry is not stated anywhere. Shown as a point here. Should it also allow a line or a polygon, and what attributes does it carry on the location record?"
-						}
-					]
-				},
-				{
-					name: "Control",
-					fields: [
-						{
-							id: "responsibility",
-							label: "Responsibility",
-							type: "select",
-							options: [
-								{ label: "Occupier led" },
-								{ label: "Council Control" },
-								{ label: "Other Weed", origin: "new" },
-								{ label: "[Not specified]" }
-							],
-							value: "Occupier led",
-							origin: "wording",
-							decision: "Drives the three follow-up sections below: Occupier Led, Council Control and Other Weed.",
-							detail: "Existing field with new wording — the title in the RSHL requirements reads “Controlled by Responibility”, a half-finished rename with a typo. Relates to all locations captured for one species."
-						},
-						{
-							id: "controlDuringInspection",
-							label: "Control during inspection",
-							type: "select",
-							options: [
-								"[Not Entered]",
-								"Full Manual Control",
-								"Full Control with Herbicide Only",
-								"Full Manual and Herbicide Control",
-								"Partial Manual Control",
-								"Partial Control with Herbicide Only",
-								"Partial Manual and Herbicide Control"
-							],
-							value: "[Not Entered]",
-							origin: "existing",
-							detail: "Existing field, unchanged. Relates to all locations captured for one species."
-						},
-						{ id: "sprayDiary", label: "Add Part — Spray Diary", type: "action", origin: "existing", detail: "A Spray Diary location type is already configured in Datascape." }
-					]
-				},
-				{
-					name: "Occupier Led",
-					conditionText: "IF Responsibility = Occupier led",
-					showWhen: { field: "responsibility", equals: "Occupier led" },
-					detail: "Repeated for each species where responsibility is Occupier Led.",
-					decision: "5 August 2026 Pest Plant POC. The officer does not choose to create or link an incident. For an occupier-led plant, the incident is created automatically when Compliance Status is Non-compliant or Compliant at end of Inspection. A planned return updates that incident and does not create a second one. Plain Compliant does not auto-create an incident. The retest result — answering yes and entering a date created no incident — is a defect against this rule.",
-					mapsTo: "All Occupier Led species details go into one incident record after sync",
-					fields: [
-						{
-							id: "complianceStatus",
-							label: "Compliance Status",
-							type: "select",
-							options: ["Compliant", "Compliant at end of Inspection", "Non-compliant"],
-							value: "Non-compliant",
-							mandatory: true,
-							origin: "existing",
-							detail: "Defaulted to Non-compliant so the future-booking question is visible. Switch to Compliant and that question drops off."
-						},
-						{
-							id: "ruleBreached",
-							label: "Rule Breached",
-							type: "multiselect",
-							options: [
-								"RPMP 5.1 — Progressive containment",
-								"RPMP 5.2 — Sustained control",
-								"RPMP 5.3 — Good neighbour rule",
-								"RPMP 6.1 — Prohibition on sale",
-								"RPMP 6.2 — Prohibition on propagation"
-							],
-							origin: "wording",
-							question: "Occupier Led, field Rule Breached. The requirement says add the RPMP rules, and that each council provides them when the survey is set up. It is not clear because no rules are listed. The prototype shows five example rules. Please supply the list, or confirm each council supplies its own."
-						},
-						{
-							id: "incidentRequired",
-							label: "Do you want to create a future inspection booking on the incident?",
-							type: "boolean",
-							options: ["Yes", "No"],
-							value: "Yes",
-							mandatory: true,
-							origin: "wording",
-							conditionText: "IF Compliance Status is Non-compliant or Compliant at end of Inspection",
-							showWhen: {
-								any: [
-									{ field: "complianceStatus", equals: "Non-compliant" },
-									{ field: "complianceStatus", equals: "Compliant at end of Inspection" }
-								]
-							},
-							decision: "Locked on 10 August 2026, recorded on the ticket on 11 August. This does not create the incident. Yes adds a future inspection booking on the incident. No does not."
-						},
-						{
-							id: "incidentDate",
-							label: "Future inspection date",
-							type: "date",
-							origin: "existing",
-							conditionText: "IF Do you want to create a future inspection booking on the incident? = Yes",
-							showWhen: {
-								all: [
-									{ field: "incidentRequired", equals: "Yes" },
-									{
-										any: [
-											{ field: "complianceStatus", equals: "Non-compliant" },
-											{ field: "complianceStatus", equals: "Compliant at end of Inspection" }
-										]
-									}
-								]
-							}
-						}
-					]
-				},
-				{
-					name: "Council Control",
-					conditionText: "IF Responsibility = Council Control",
-					showWhen: { field: "responsibility", equals: "Council Control" },
-					fields: [
-						{
-							id: "placePlanCouncil",
-							label: "Create a Place Plan or link to Existing",
-							type: "boolean",
-							options: ["Yes", "No"],
-							value: "Yes",
-							mandatory: true,
-							origin: "wording",
-							detail: "Renamed at the retest. One Place Plan per species.",
-							question: [
-								"Council Control, field Create a Place Plan or link to Existing. The requirement says this is a Yes/No, shown when Responsibility is Council Control, answered Yes unless the officer changes it, and that it creates a Place Plan or links to an existing one, one plan per species. It is not clear because it does not say whether Yes only reminds the officer to do that later, or whether Yes does it from the survey. The prototype shows the Yes/No only. Which should it be?",
-								"Datacom to check: can a Place Plan, and the infestation on it, be created or linked while the officer is still out of range?"
-							]
-						}
-					]
-				},
-				{
-					name: "Other Weed",
-					conditionText: "IF Responsibility = Other Weed",
-					showWhen: { field: "responsibility", equals: "Other Weed" },
-					fields: [
-						{
-							id: "placePlanOther",
-							label: "Create a Place Plan or link to Existing",
 							type: "boolean",
 							options: ["Yes", "No"],
 							value: "No",
-							origin: "wording",
-							detail: "Optional. Renamed at the retest.",
-							question: "Other Weed, field Create a Place Plan or link to Existing. The requirement puts this question under Other Weed, optional, and answered No unless the officer changes it. It is not clear because the instruction for when to show it still says Council Control, which already has its own Place Plan question. The prototype shows this question only when Responsibility is Other Weed. Is that right?"
+							origin: "existing",
+							detail: "A Yes/No on the infestation location, as on the current survey. It is not its own pin."
 						}
+					]
+				}
+			]
+		},
+		{
+			name: "Control",
+			fields: [
+				{
+					id: "responsibility",
+					label: "Responsibility",
+					type: "select",
+					options: ["Occupier Led", "Council Control", "Other Weed"],
+					value: "Occupier Led",
+					origin: "existing"
+				},
+				{
+					id: "controlDuringInspection",
+					label: "Control During Inspection",
+					type: "select",
+					options: [
+						"Full Manual Control",
+						"Full Control with Herbicide Only",
+						"Full Manual and Herbicide Control",
+						"Partial Manual Control",
+						"Partial Control with Herbicide Only",
+						"Partial Manual and Herbicide Control"
+					],
+					value: "Full Control with Herbicide Only",
+					origin: "existing"
+				}
+			]
+		},
+		{
+			name: "Species Management",
+			fields: [
+				{
+					id: "complianceStatus",
+					label: "Compliance Status",
+					type: "select",
+					options: ["Compliant", "Compliant at end of Inspection", "Non-compliant"],
+					value: "Non-compliant",
+					origin: "existing"
+				},
+				{ id: "ruleBreached", label: "Rule Breached", type: "text", origin: "existing" }
+			]
+		},
+		{
+			name: "Further Actions",
+			repeaters: [
+				{
+					id: "furtherActions",
+					name: "Further Action",
+					addText: "+ Further Action",
+					origin: "existing",
+					fields: [
+						{ id: "requiredAction", label: "Required Action", type: "textarea", origin: "existing" }
 					]
 				}
 			]
 		},
 		{
 			name: "Pest Plant Inspection Actions",
-			origin: "wording",
-			decision: "Moved at the retest to sit after all the Infestation Details repeaters, so the form follows the order an officer works in.",
-			conditionText: "Hidden once Was the property inspected? = No.",
-			showWhen: { field: "propertyInspected", equals: "Yes" },
-			fields: [
-				{
-					id: "comments",
-					label: "Comments",
-					type: "textarea",
-					origin: "new",
-					detail: "Maps to the comments section on the incident, but stays on the survey for a place plan.",
-					mapsTo: "Comments on Incident record"
-				}
-			]
-		},
-		{
-			name: "Further Actions",
-			origin: "new",
-			decision: "Moved at the retest to sit after Pest Plant Inspection Actions. All three fields are always shown; there is no Yes/No gate in front of them.",
-			conditionText: "Hidden once Was the property inspected? = No.",
-			showWhen: { field: "propertyInspected", equals: "Yes" },
-			repeaters: [
-				{
-					id: "furtherActions",
-					name: "Required action",
-					addText: "Add required action",
-					platform: {
-						lead: "Platform limitation:",
-						text: "On the Fieldwork app this block is drawn at the very bottom of the form. On the Datascape desktop it stays where it is."
-					},
-					origin: "new",
-					fields: [
-						{ id: "requiredAction", label: "Required Action", type: "textarea", origin: "new" },
-						{ id: "requiredWhom", label: "Required by Whom?", type: "text", origin: "new" },
-						{ id: "requiredDate", label: "Date required by", type: "date", origin: "new" }
-					]
-				}
-			]
-		},
-		{
-			name: "Advice and Information",
-			conditionText: "Hidden once Was the property inspected? = No.",
-			showWhen: { field: "propertyInspected", equals: "Yes" },
 			fields: [
 				{
 					id: "advice",
 					label: "Advice and Information",
 					type: "boolean",
 					options: ["Yes", "No"],
-					value: "Yes",
-					origin: "wording",
-					detail: "New format. Defaults to Yes on this sheet, unlike the Rabbit and Biocontrol sheets which default the same field to No."
-				}
-			],
-			sections: [
+					value: "No",
+					origin: "existing"
+				},
 				{
-					name: "Information",
-					conditionText: "IF Advice and Information = Yes",
-					showWhen: { field: "advice", equals: "Yes" },
-					fields: [
-						{ id: "informationGiven", label: "Information Given", type: "textarea", origin: "wording" }
-					]
-				}
-			]
-		},
-		{
-			name: "Reinspection",
-			origin: "existing",
-			decision: "Moved at the retest to the end of the working sequence, after Further Actions.",
-			conditionText: "Hidden once Was the property inspected? = No.",
-			showWhen: { field: "propertyInspected", equals: "Yes" },
-			fields: [
-				{
-					id: "reinspectRequired",
-					label: "Reinspection Required",
+					id: "noticeLeft",
+					label: "Entry Advice Notice Left?",
 					type: "boolean",
 					options: ["Yes", "No"],
 					value: "No",
-					origin: "existing",
-					detail: "Same as all other surveys",
-					mapsTo: "JRB - Reinspection Booking and Date"
-				}
-			],
-			sections: [
+					origin: "existing"
+				},
 				{
-					name: "Reinspection detail",
-					conditionText: "IF Reinspection Required = Yes",
-					showWhen: { field: "reinspectRequired", equals: "Yes" },
-					fields: [
-						{
-							id: "reinspectDate",
-							label: "Reinspection Date",
-							type: "date",
-							origin: "existing",
-							detail: "Generates a reinspection booking for the property.",
-							mapsTo: "JRB - Reinspection Booking and Date",
-							question: "RSHL to decide. What is expected here? At the retest the new booking was created but carried none of the original detail — no location or property, and no Pest Plant Inspection survey attached."
-						}
-					]
-				}
-			]
-		},
-		{
-			name: "Biosecurity Notice",
-			conditionText: "Hidden once Was the property inspected? = No.",
-			showWhen: { field: "propertyInspected", equals: "Yes" },
-			sections: [
-				{
-					name: "Notice of Inspection",
-					decision: "This section and its Yes/No gate stay as they are.",
-					fields: [
-						{ id: "noticeLeft", label: "Entry Advice Notice left?", type: "boolean", options: ["Yes", "No"], value: "No", mandatory: true, origin: "new" }
-					],
-					sections: [
-						{
-							name: "Notice detail",
-							conditionText: "IF Entry Advice Notice left? = Yes",
-							showWhen: { field: "noticeLeft", equals: "Yes" },
-							fields: [
-								{ id: "noticePhoto", label: "Entry Advice Notice Photo", type: "media", media: "photo", mandatory: true, origin: "existing" },
-								{ id: "noticeNumber", label: "Entry Advice Notice Number", type: "text", mandatory: true, origin: "existing" },
-								{ id: "noticeWhere", label: "Where was it left?", type: "text", origin: "new" }
-							]
-						}
-					]
-				}
-			]
-		},
-		{
-			name: "Timesheet End Date",
-			origin: "existing",
-			question: "Timesheet End Date, fields Actual End Date and Actual End Time. The requirement says the survey ends when the property was not inspected. It is not clear because this section is still listed after that, with no instruction to hide it. The prototype leaves Timesheet End Date on when Was the property inspected? is No. Should the officer still fill in the end date and time?",
-			fields: [
-				{ id: "endDate", label: "Actual End Date", type: "date", value: "2026-09-28", mandatory: true, origin: "existing", mapsTo: "JRB - Actual date/time" },
-				{ id: "endTime", label: "Actual End Time", type: "time", value: "13:50", mandatory: true, origin: "existing", mapsTo: "JRB - Actual date/time" },
-				{ id: "endReason", label: "Reason", type: "text", origin: "existing", mapsTo: "JRB - Dates Reason" },
-				{
-					id: "completionBehaviour",
-					label: "Completion Behaviour",
+					id: "overallCompliance",
+					label: "Overall Inspection Compliance Status",
 					type: "select",
-					options: ["Pending Completion", "Complete", "Complete and Send"],
-					value: "Pending Completion",
-					mandatory: true,
+					options: ["Compliant", "Compliant at end of Inspection", "Non-compliant"],
+					value: "Compliant at end of Inspection",
+					origin: "existing"
+				},
+				{
+					id: "futureBooking",
+					label: "Do you want to create a future inspection booking on the incident?",
+					help: "Do you want to create a future inspection booking on the incident?",
+					type: "boolean",
+					options: ["Yes", "No"],
+					value: "No",
+					origin: "wording",
+					detail: "The current title is Incident Inspection Required. The current help text is “Automatically create a Booking for the Incident Record created”. Both now read as the question above."
+				},
+				{
+					id: "incidentDate",
+					label: "Incident Inspection Date",
+					type: "date",
 					origin: "existing",
-					detail: "Same as all other surveys."
+					conditionText: "Shown when the future inspection booking question is Yes.",
+					showWhen: { field: "futureBooking", equals: "Yes" }
+				},
+				{ id: "comments", label: "General Comments", type: "textarea", origin: "existing" }
+			]
+		},
+		{
+			name: "Contacts",
+			repeaters: [
+				{
+					id: "contacts",
+					name: "Contact",
+					addText: "+ Contact",
+					origin: "existing",
+					fields: [
+						{ id: "contactSearch", label: "Contact", type: "lookup", lookupOf: "Contact", origin: "existing" }
+					]
 				}
 			]
 		}
@@ -2823,6 +2437,7 @@ window.PESTPLANT_SURVEY = {
 		const ask = engineeringBox(field);
 		if (ask) wrap.appendChild(ask);
 		if (field.type !== "action" && !deskToggle) wrap.appendChild(labelRow(field));
+		if (field.help) wrap.appendChild(el("p", "field-help", field.help));
 
 		const control = controlFor(field);
 		let node;
