@@ -1317,8 +1317,8 @@ body.record .part-head, body.record .section-head {
 body.record .section-head { font-size: 13px; padding-top: 8px; border-bottom: 0; }
 body.record .part-head .toggle, body.record .section-head .toggle { font-size: 12px; font-weight: 700; color: var(--shallow-blue); }
 body.record .add { color: var(--shallow-blue); border-color: var(--shallow-blue); font-weight: 700; height: 32px; background: #fff; }
-body.record .ds-toggle { display: flex; align-items: center; gap: 8px; min-height: 28px; margin-bottom: 8px; }
-body.record .ds-switch {
+.ds-toggle { display: flex; align-items: center; gap: 8px; min-height: 28px; margin-bottom: 8px; }
+.ds-switch {
 	width: 32px;
 	height: 18px;
 	border: 1px solid #bbbcbd;
@@ -1328,7 +1328,7 @@ body.record .ds-switch {
 	cursor: pointer;
 	padding: 0;
 }
-body.record .ds-switch i {
+.ds-switch i {
 	position: absolute;
 	top: 1px;
 	left: 1px;
@@ -1337,10 +1337,10 @@ body.record .ds-switch i {
 	border-radius: 50%;
 	background: #00bce2;
 }
-body.record .ds-switch.on { background: #00bce2; border-color: #00bce2; }
-body.record .ds-switch.on i { left: 15px; background: #fff; }
-body.record .ds-toggle-val { color: #00bce2; font-size: 12px; font-weight: 700; min-width: 18px; }
-body.record .ds-toggle-label { font-size: 13px; color: #1c1c1d; }
+.ds-switch.on { background: #00bce2; border-color: #00bce2; }
+.ds-switch.on i { left: 15px; background: #fff; }
+.ds-toggle-val { color: #00bce2; font-size: 12px; font-weight: 700; min-width: 18px; }
+.ds-toggle-label { font-size: 13px; color: #1c1c1d; }
 
 	</style>
 </head>
@@ -1751,6 +1751,7 @@ window.PESTPLANT_SURVEY = {
 	let derived = [];
 	let locks = [];
 	let surface = "desk";
+	let booleanToggle = false;
 	let specOn = true;
 	let movedNote = null;
 	let heldRepeaters = [];
@@ -2085,6 +2086,8 @@ window.PESTPLANT_SURVEY = {
 		row.appendChild(btn);
 		row.appendChild(val);
 		row.appendChild(caption);
+		const chip = originChip(field.origin);
+		if (chip) row.appendChild(chip);
 		return row;
 	}
 
@@ -2433,7 +2436,7 @@ window.PESTPLANT_SURVEY = {
 			if (field.showWhen) register(wrap, field.showWhen, field.conditionText, scope);
 			return wrap;
 		}
-		const deskToggle = field.type === "boolean" && surface !== "field" && document.body.classList.contains("record");
+		const deskToggle = field.type === "boolean" && surface !== "field" && booleanToggle;
 		const ask = engineeringBox(field);
 		if (ask) wrap.appendChild(ask);
 		if (field.type !== "action" && !deskToggle) wrap.appendChild(labelRow(field));
@@ -2817,6 +2820,7 @@ window.PESTPLANT_SURVEY = {
 	function render(options) {
 		const schema = options.schema || global.RABBIT_SURVEY;
 		surface = options.surface || "desk";
+		booleanToggle = options.booleanToggle === true || document.body.classList.contains("record");
 		movedNote = (schema.meta && schema.meta.movedNote) || null;
 		heldRepeaters = [];
 
@@ -2939,7 +2943,8 @@ window.PESTPLANT_SURVEY = {
 		SurveyRenderer.render({
 			mount: document.getElementById("survey-mount"),
 			surface: "desk",
-			schema: window.PESTPLANT_SURVEY
+			schema: window.PESTPLANT_SURVEY,
+			booleanToggle: true
 		});
 		// Initialise from the control so a browser-restored checkbox state cannot
 		// disagree with what is on screen.
