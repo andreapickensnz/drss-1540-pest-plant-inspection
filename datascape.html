@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>DRSS-1540 Pest Plant Inspection · Datascape</title>
+	<title>DRSS-1540 Pest Plant Inspection · Datascape · v4</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet" />
@@ -1252,17 +1252,20 @@ body.record .rec-info {
 	font-size: 11px; font-weight: 700; font-style: italic;
 	display: inline-flex; align-items: center; justify-content: center;
 }
-body.record .rec-tools { display: flex; align-items: center; gap: 10px; color: #5c5c66; font-size: 14px; }
-body.record .rec-complete {
-	background: #3a3a3a;
-	color: #fff;
+body.record .rec-tools { display: flex; align-items: center; justify-content: flex-end; color: #1b2744; }
+body.record .rec-actions { display: flex; align-items: center; gap: 16px; padding: 8px 0 0; color: #1b2744; }
+body.record .rec-actions button {
 	border: 0;
-	border-radius: 4px;
-	padding: 6px 12px;
-	font-size: 12px;
-	font-weight: 700;
+	background: none;
+	padding: 0;
+	color: inherit;
 	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1px;
 }
+body.record .rec-actions button:focus-visible { outline: 2px solid var(--ds-focus-border); outline-offset: 2px; }
 body.record .rec-identity {
 	display: flex;
 	align-items: flex-end;
@@ -1342,9 +1345,68 @@ body.record .add { color: var(--shallow-blue); border-color: var(--shallow-blue)
 .ds-toggle-val { color: #00bce2; font-size: 12px; font-weight: 700; min-width: 18px; }
 .ds-toggle-label { font-size: 13px; color: #1c1c1d; }
 
+</style>
+	<style>
+	body.record { --ds-label-font: 12px; --ds-input-font: 12px; }
+	body.record .ds-appbar { border-bottom-color: var(--indigo); height: 64px; gap: 14px; }
+	body.record .ds-mark { width: 34px; height: 34px; background: none; }
+	body.record .ds-goto { flex: 1; border-color: var(--indigo); border-radius: 4px; min-width: 90px; }
+	body.record .ds-opentabs { font-size: 11px; }
+	body.record button svg { display: block; flex-shrink: 0; }
+	body.record .ds-apptools button, body.record .rec-tools button, body.record .ds-rail button { border: 0; background: transparent; padding: 5px; color: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+	body.record .ds-rail { gap: 12px; }
+	body.record .ds-rail button.on { background: var(--indigo-soft); color: var(--indigo); }
+	body.record .rec-tools { color: var(--deep-blue); }
+	body.record .rec-title-row h1 { color: var(--deep-blue); font-size: 18px; }
+	body.record .rec-status { background: #e6e6e7; color: #3d4542; }
+	body.record .rec-identity { flex-wrap: wrap; gap: 16px; }
+	body.record .rec-identity input { max-width: 100%; height: 28px; border: 1px solid var(--ds-input-border); padding: 0 8px; font-size: 12px; color: var(--deep-blue); }
+	.rec-tabs { padding: 8px 22px; }
+	.rec-tabs select { width: auto; max-width: 100%; color: var(--shallow-blue); border: 1px solid var(--shallow-blue); height: 24px; }
+	body.record .section { margin-top: 8px; }
+	body.record .part-body, body.record .section-body { padding-top: 10px; }
+	body.record .part-head { width: calc(100% - 44px); margin: 0 22px; padding-left: 0; padding-right: 0; border-bottom: 1px solid var(--divider); }
+	body.record .section-head { padding-left: 0; padding-right: 0; border-bottom: 1px solid var(--divider); }
+	body.record .surface-desk .section-body { padding: 8px 0 4px; }
+	body.record .section.depth-2 { margin-left: 0; padding-left: 0; border-left: 0; }
+	body.record .rep-row { display: block; background: #f8f8f9; padding: 10px; }
+	body.record .rep-row .section-head { padding-left: 0; padding-right: 0; }
+	body.record .repeater { padding: 0; border: 0; background: transparent; }
+	body.record .repeater-head { display: none; }
+	body.record .rep-row > .rep-bar { font-size: 12px; font-weight: 700; }
+	body.record .rep-row > .rep-bar:has(> .pest-item-title) { padding: 8px 0 6px; border-bottom: 2px solid var(--divider); }
+	body.record .pest-item-title, body.record .rep-row .section-head { font-size: 13px; font-weight: 700; line-height: 20px; color: var(--deep-blue); }
+	body.record .rep-row .section-head { border-bottom: 2px solid var(--divider); }
+	body.record .field-textarea textarea { height: 38px; min-height: 38px; }
+	body.record .field-help { font-size: 12px; }
+	body.record .ds-toggle { gap: 0; margin-bottom: 0; min-height: 24px; }
+	body.record .ds-switch { flex: 0 0 44px; width: 44px; height: 24px; margin: 0 8px 0 0; border: 1px solid #bbbcbd; border-radius: 2px; background: #fff; color: #1c1c1d; box-shadow: inset 0 -1px 0 #fff, inset 0 1px 1px rgba(0, 0, 0, .05); }
+	body.record .ds-switch i { top: 2px; left: 2px; width: 14px; height: 18px; border-radius: 2px; background: #00bce2; }
+	body.record .ds-switch.on { background: #fff; border-color: #bbbcbd; }
+	body.record .ds-switch.on i { left: auto; right: 2px; background: #00bce2; }
+	body.record .ds-switch .ds-toggle-val { position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-end; padding: 0 6px 0 16px; color: #1c1c1d; font-size: 10px; line-height: 10px; font-weight: 400; }
+	body.record .ds-switch.on .ds-toggle-val { justify-content: flex-start; padding: 0 16px 0 6px; }
+	body.record .ds-switch:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+	body.record .ds-toggle-label { font-size: 12px; }
+	body.record .pest-boolean-stacked > .ds-toggle-label { color: var(--caption); font-weight: 700; }
+	.pest-dropdown { position: relative; border: 1px solid var(--ds-input-border); border-bottom-color: var(--ds-input-underline); background: white; font-size: 12px; }
+	.pest-dropdown summary { cursor: pointer; padding: 5px 8px; min-height: 28px; }
+	.pest-dropdown .choice-list { padding: 6px; }
+	.field > .brick[hidden], .field > .choice-list[hidden] { display: none; }
+	.pest-species-results { display: flex; flex-direction: column; border: 1px solid var(--field-border); max-height: 160px; overflow: auto; }
+	.pest-species-results[hidden] { display: none; }
+	.pest-species-results button { text-align: left; background: white; border: 0; padding: 10px; cursor: pointer; color: var(--deep-blue); font-size: var(--ds-input-font); }
+	.pest-species-results button:hover, .pest-species-results button:focus { background: var(--indigo-wash); }
+	.pest-species-selected { display: flex; flex-wrap: wrap; gap: 5px; }
+	.pest-species-selected:empty { display: none; }
+	.pest-species-selected button { border: 1px solid var(--indigo-mid); background: var(--indigo-wash); color: var(--deep-blue); border-radius: 4px; padding: 5px 8px; cursor: pointer; font-size: var(--ds-input-font); }
+	body.record .spatial { min-height: 180px; justify-content: center; background: #f4f6f5; }
+	@media (max-width: 850px) { .ds-opentabs, .ds-tenant { display: none !important; } body.record .ds-appbar { gap: 8px; padding: 0 8px; } }
+	@media (max-width: 500px) { body.record .ds-brand small, body.record .ds-apptools > button { display: none; } body.record .rec-title-row { flex-wrap: wrap; gap: 4px; } body.record .rec-meta { margin-left: 0; } body.record .rec-identity input { width: 120px; } }
+	@media (max-width: 500px) { body.record .part-head .toggle, body.record .section-head .toggle { flex: 0 1 45%; white-space: normal; text-align: right; } }
 	</style>
 </head>
-<body class="desk">
+<body class="record desk">
 	<div class="mock-banner">
 		<strong data-doc-title>DRSS-1540 Pest Plant Inspection</strong>
 		<span class="doc-surface" data-doc-surface>Datascape</span>
@@ -1352,42 +1414,52 @@ body.record .add { color: var(--shallow-blue); border-color: var(--shallow-blue)
 		<span class="links">
 			<label class="spec-switch"><input type="checkbox" id="spec-toggle" autocomplete="off" /> Spec notes</label>
 		</span>
-		<p class="mock-note"><strong>Note to RSHL: Check the content, not the look.</strong> Colours and styling will be Datascape’s own in the real app. Please confirm: every field you need is here, the right fields are mandatory, the order and section names make sense (officers jump between sections using the app’s Form Index), and the dropdown values are correct.</p>
+		<p class="mock-note"><strong>Existing survey, four changes only.</strong> Matched to the supplied Datascape screenshots and exported configuration. Spec notes identify the four confirmed changes. This mock does not save records or create bookings.</p>
 	</div>
 
-	<header class="app-header">
-		<div class="brand"><span class="brand-mark"></span> Datascape</div>
-		<div class="omnibox">Search records, reports, help…</div>
-		<div class="who">H. Giles · Otago Regional Council</div>
+	<header class="ds-appbar">
+		<div aria-hidden="true"><svg width="18" height="18" viewBox="0 0 18 18" fill="#7827ff"><path d="M1 1h4v4H1zM7 1h4v4H7zM13 1h4v4h-4zM1 7h4v4H1zM7 7h4v4H7zM13 7h4v4h-4zM1 13h4v4H1zM7 13h4v4H7zM13 13h4v4h-4z"/></svg></div>
+		<div class="ds-brand"><span class="ds-mark"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><defs><linearGradient id="dsorb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d7c4ff"/><stop offset="1" stop-color="#6d28d9"/></linearGradient></defs><circle cx="17" cy="17" r="16" fill="url(#dsorb)"/><ellipse cx="13" cy="12" rx="6" ry="8" fill="#f7f1ff" opacity=".9"/></svg></span><span><strong>Datascape</strong><small>Enterprise</small></span></div>
+		<div class="ds-tenant">Regional Software<br>Holdings Ltd<small>ACCEPT</small></div>
+		<div class="ds-opentabs"><span>All Surveys: Survey</span><span class="on">Survey: Pest Plant Inspection</span></div>
+		<div class="ds-goto">Go to ...</div>
+		<div class="ds-apptools">
+			<button type="button" title="Search" aria-label="Search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16.5 16.5L21 21"/></svg></button>
+			<button type="button" title="Notifications" aria-label="Notifications"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7 2.5 8.5H3.5C3.5 16 6 15 6 9M10 20a2 2 0 0 0 4 0"/></svg></button>
+			<span class="ds-avatar">AP</span>
+			<button type="button" title="More" aria-label="More"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></button>
+		</div>
 	</header>
 
 	<div class="desk-shell">
-		<nav class="rail" aria-label="Application">
-			<button type="button" title="Home">⌂</button>
-			<button type="button" class="on" title="Records">≡</button>
-			<button type="button" title="Favourites">★</button>
-			<button type="button" title="My Surveys">✓</button>
+		<nav class="ds-rail" aria-label="Application">
+			<button type="button" title="Collapse navigation" aria-label="Collapse navigation"><svg width="16" height="12" viewBox="0 0 16 12" aria-hidden="true"><path d="M1 1.5L5.5 6 1 10.5M8 1.5L12.5 6 8 10.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button>
+			<button type="button" class="on" title="Survey" aria-label="Survey"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></button>
+			<button type="button" title="Connections" aria-label="Connections"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.1 0l1.4-1.4a5 5 0 0 0-7.1-7.1L10 5M14 11a5 5 0 0 0-7.1 0L5.5 12.4a5 5 0 0 0 7.1 7.1L14 19"/></svg></button>
+			<button type="button" title="Interactions" aria-label="Interactions"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="12" cy="5.5" r="2.6"/><circle cx="6.2" cy="16.5" r="2.6"/><circle cx="17.8" cy="16.5" r="2.6"/></svg></button>
+			<button type="button" title="Documents" aria-label="Documents"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"/></svg></button>
+			<button type="button" title="Audit history" aria-label="Audit history"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5M12 7v5l3 2"/></svg></button>
 		</nav>
 
 		<main class="workspace">
 			<div class="panel">
-				<div class="title-bar">
-					<h1><span class="short-code">SVINF.3312</span> Pest Plant Infestation Inspection</h1>
-				</div>
-				<div class="tabs">
-					<button type="button" class="on">Details</button>
-					<button type="button">Survey Items</button>
-					<button type="button">Related</button>
-					<button type="button">Documents</button>
-					<button type="button">Audit</button>
-				</div>
-
-				<div class="key-info">
-					<div><div class="k">Survey Type</div><div class="v">INFEST · exists in config</div></div>
-					<div><div class="k">Linked Job</div><div class="v">JRB.7455 · Pest Plant Inspection</div></div>
-					<div><div class="k">Property</div><div class="v">Bendigo Station, Tarras</div></div>
-					<div><div class="k">Primary Officer</div><div class="v">H. Giles</div></div>
-					<div><div class="k">Status</div><div class="v">In progress</div></div>
+				<div class="rec-head">
+					<div class="rec-crumb">Survey | DSCREGBiosecurityPestPlantInspection.8414</div>
+					<div class="rec-title-row">
+						<h1>Pest Plant Inspection - 8414</h1>
+						<div class="rec-tools">
+							<button type="button" title="Delete" aria-label="Delete"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V5h6v2M7 7l1 13h8l1-13"/></svg></button>
+							<button type="button" title="Print" aria-label="Print"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/></svg><span aria-hidden="true">▾</span></button>
+							<button type="button" title="Save" aria-label="Save"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3h11l3 3v15H5zM8 3v6h8V3M8 21v-6h8v6"/></svg><span aria-hidden="true">▾</span></button>
+							<button type="button" title="Close" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+						</div>
+					</div>
+					<div class="rec-identity">
+						<label>Survey Type<input value="Pest Plant Inspection" readonly /></label>
+						<label>Number<input value="8414" readonly /></label>
+						<div class="rec-meta"><div class="rec-modified">Prototype of the supplied record</div><div class="rec-status">Preview</div></div>
+					</div>
+					<div class="rec-tabs"><select aria-label="Survey form"><option>Pest Plant Inspection</option></select></div>
 				</div>
 
 				<p class="legend">
@@ -1421,8 +1493,8 @@ body.record .add { color: var(--shallow-blue); border-color: var(--shallow-blue)
 	DRSS-1540 Pest Plant Inspection.
 
 	The survey is already built in Datascape. This prototype follows that form,
-	as shown on surveys 7802 and 8414, plus the four changes in Halema Jamieson's
-	comment on 28 October 2026. It does not rebuild the April layout.
+	as shown on surveys 7802 and 8414, plus the four changes in Halema's
+	instruction supplied with this request. It does not rebuild the April layout.
 
 	The four changes:
 		1. Pest Plant Inspection Actions — title and help text of Incident Inspection Required
@@ -1438,11 +1510,11 @@ body.record .add { color: var(--shallow-blue); border-color: var(--shallow-blue)
 */
 window.PESTPLANT_SURVEY = {
 	meta: {
-		docTitle: "DRSS-1540 Pest Plant Inspection",
+		docTitle: "DRSS-1540 Pest Plant Inspection · v4",
 		jira: "DRSS-1540",
 		jiraUrl: "https://datacomgroup.atlassian.net/browse/DRSS-1540",
-		surveyType: "Pest Plant Infestation Inspection",
-		shortCode: "SVINF.3312",
+		surveyType: "Pest Plant Inspection",
+		shortCode: "DSCREGBiosecurityPestPlantInspection.8414",
 		job: "Pest Plant Inspection",
 		property: "Pest Plant Inspection - 7802",
 		officer: "H. Giles",
@@ -1451,7 +1523,7 @@ window.PESTPLANT_SURVEY = {
 		readerNotes: [
 			{
 				heading: "This is the survey already built.",
-				text: "Halema Jamieson, 28 October 2026: do not rebuild the survey. The form below is the one that was tested. Only the four marked changes are new."
+				text: "Halema's supplied instruction: do not rebuild the survey. The form follows the supplied screenshots and exported configuration. Only the four marked changes are new. Example values are illustrative, not defaults or a live record."
 			},
 			{
 				heading: "The yellow row is Target species.",
@@ -1461,22 +1533,23 @@ window.PESTPLANT_SURVEY = {
 	},
 	parts: [
 		{
-			name: "Weather",
-			fields: [
+			name: "Survey Detail",
+			sections: [{
+				name: "Weather",
+				fields: [
 				{ id: "captureWeather", label: "Capture Weather?", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" }
-			]
-		},
-		{
+				]
+			}, {
 			name: "In Attendance",
 			fields: [
 				{ id: "inAttendance", label: "In Attendance", type: "textarea", origin: "existing" }
 			]
-		},
-		{
+			}, {
 			name: "Authority",
 			fields: [
 				{ id: "warrantShown", label: "Warrant Shown", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" }
 			]
+			}]
 		},
 		{
 			name: "Pest Plant Inspection",
@@ -1489,7 +1562,7 @@ window.PESTPLANT_SURVEY = {
 						"Proactive Surveillance",
 						"Enquiry or Request",
 						"Complaint",
-						"Reinspection",
+						"Re-inspection",
 						"Nursery Inspection"
 					],
 					value: "Enquiry or Request",
@@ -1501,7 +1574,8 @@ window.PESTPLANT_SURVEY = {
 					type: "multilookup",
 					lookupOf: "Species",
 					origin: "new",
-					detail: "The yellow row in the April layout. Species library, more than one species. Sits after Reason for Inspection and before Property Inspected."
+					detail: "April spreadsheet, Pest Plant Inspection row 30 (yellow): multi-select Species library lookup. Show species name, RPMP and NPPA status. Placed after Reason for Inspection and before Property Inspected.",
+					mapsTo: "Species library records; retain their species name, RPMP and NPPA status."
 				},
 				{
 					id: "propertyInspected",
@@ -1511,6 +1585,10 @@ window.PESTPLANT_SURVEY = {
 					value: "Yes",
 					mandatory: true,
 					origin: "existing"
+				},
+				{
+					id: "propertyNotInspectedReason", label: "Reason", type: "text", origin: "existing", mandatory: true,
+					showWhen: { field: "propertyInspected", equals: "No" }
 				},
 				{
 					id: "areaSearched",
@@ -1531,8 +1609,44 @@ window.PESTPLANT_SURVEY = {
 			]
 		},
 		{
+			name: "Pest Plant Inspection Actions",
+			fields: [
+				{ id: "advice", label: "Advice and Information", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" },
+				{ id: "noticeLeft", label: "Entry Advice Notice Left?", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" },
+				{ id: "noticePhoto", label: "Entry Advice Notice Photo", type: "media", media: "photo", origin: "existing", showWhen: { field: "noticeLeft", equals: "Yes" } },
+				{ id: "overallCompliance", label: "Overall Inspection Compliance Status", type: "readonly", value: "Non-compliant", origin: "existing", detail: "Calculated by the existing survey. This prototype shows an illustrative result and does not replace the live calculation." },
+				{
+					id: "futureBooking",
+					label: "Do you want to create a future inspection booking on the incident?",
+					help: "Do you want to create a future inspection booking on the incident?",
+					type: "boolean", options: ["Yes", "No"], value: "No", origin: "wording",
+					detail: "Only the existing title and help text change. The existing booking and date behaviour is retained.",
+					showWhen: { any: [{ field: "overallCompliance", equals: "Compliant at end of Inspection" }, { field: "overallCompliance", equals: "Non-compliant" }] }
+				},
+				{ id: "incidentDate", label: "Incident Inspection Date", type: "date", origin: "existing", mandatory: true, showWhen: { field: "futureBooking", equals: "Yes" } },
+				{ id: "comments", label: "General Comments", type: "textarea", origin: "existing" }
+			]
+		},
+		{
+			name: "Contacts",
+			repeaters: [{
+				id: "contacts", name: "Contact", addText: "+ Contact", origin: "existing",
+				fields: [
+					{ id: "contactSearch", label: "Contact", type: "lookup", lookupOf: "Contact", origin: "existing" },
+					{ id: "relationshipType", label: "Relationship Type", type: "lookup", lookupOf: "Relationship Type", origin: "existing" },
+					{ id: "dateOfBirth", label: "Date of Birth", type: "date", origin: "existing", showWhen: { field: "relationshipType", equals: "Alleged Offender" } }
+				]
+			}]
+		},
+		{
 			name: "Infestation Details",
-			sections: [
+			repeaters: [{
+				id: "infestationDetails",
+				name: "Pest Plant Inspection Item",
+				addText: "+ Infestation Detail",
+				origin: "existing",
+				showWhen: { field: "speciesFound", equals: "Yes" },
+				sections: [
 				{
 					name: "Infestation Species",
 					fields: [
@@ -1560,6 +1674,16 @@ window.PESTPLANT_SURVEY = {
 					]
 				},
 				{
+					name: "Pest Plant Infestation Fine Scale Point",
+					showWhen: { field: "captureMethod", includes: "Pest Plant Infestation (Fine Scale Point)" },
+					fields: [{ id: "infestFineScalePoint", label: "Pest Plant Infestation (Fine Scale Point)", type: "spatial", geometry: "Fine Scale Point", origin: "existing" }]
+				},
+				{
+					name: "Pest Plant Infestation Polygon",
+					showWhen: { field: "captureMethod", includes: "Pest Plant Infestation (Polygon)" },
+					fields: [{ id: "infestPolygon", label: "Pest Plant Infestation (Polygon)", type: "spatial", geometry: "Polygon", origin: "existing" }]
+				},
+				{
 					name: "Pest Plant Infestation Point",
 					conditionText: "Shown when Capture Method includes Pest Plant Infestation (Point).",
 					showWhen: { field: "captureMethod", includes: "Pest Plant Infestation (Point)" },
@@ -1581,10 +1705,8 @@ window.PESTPLANT_SURVEY = {
 							detail: "A Yes/No on the infestation location, as on the current survey. It is not its own pin."
 						}
 					]
-				}
-			]
-		},
-		{
+				},
+			{
 			name: "Control",
 			fields: [
 				{
@@ -1621,10 +1743,15 @@ window.PESTPLANT_SURVEY = {
 					type: "select",
 					options: ["Compliant", "Compliant at end of Inspection", "Non-compliant"],
 					value: "Non-compliant",
-					origin: "existing"
+					origin: "existing",
+					showWhen: { field: "responsibility", equals: "Occupier Led" }
 				},
-				{ id: "ruleBreached", label: "Rule Breached", type: "text", origin: "existing" }
+				{ id: "ruleBreached", label: "Rule Breached", type: "text", origin: "existing", showWhen: { all: [{ field: "responsibility", equals: "Occupier Led" }, { field: "complianceStatus", equals: "Non-compliant" }] } },
+				{ id: "createPlacePlan", label: "Create Place Plan", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing", showWhen: { any: [{ field: "responsibility", equals: "Council Control" }, { field: "responsibility", equals: "Other Weed" }] } }
 			]
+			}
+				]
+			}]
 		},
 		{
 			name: "Further Actions",
@@ -1635,69 +1762,8 @@ window.PESTPLANT_SURVEY = {
 					addText: "+ Further Action",
 					origin: "existing",
 					fields: [
-						{ id: "requiredAction", label: "Required Action", type: "textarea", origin: "existing" }
-					]
-				}
-			]
-		},
-		{
-			name: "Pest Plant Inspection Actions",
-			fields: [
-				{
-					id: "advice",
-					label: "Advice and Information",
-					type: "boolean",
-					options: ["Yes", "No"],
-					value: "No",
-					origin: "existing"
-				},
-				{
-					id: "noticeLeft",
-					label: "Entry Advice Notice Left?",
-					type: "boolean",
-					options: ["Yes", "No"],
-					value: "No",
-					origin: "existing"
-				},
-				{
-					id: "overallCompliance",
-					label: "Overall Inspection Compliance Status",
-					type: "select",
-					options: ["Compliant", "Compliant at end of Inspection", "Non-compliant"],
-					value: "Compliant at end of Inspection",
-					origin: "existing"
-				},
-				{
-					id: "futureBooking",
-					label: "Do you want to create a future inspection booking on the incident?",
-					help: "Do you want to create a future inspection booking on the incident?",
-					type: "boolean",
-					options: ["Yes", "No"],
-					value: "No",
-					origin: "wording",
-					detail: "The current title is Incident Inspection Required. The current help text is “Automatically create a Booking for the Incident Record created”. Both now read as the question above."
-				},
-				{
-					id: "incidentDate",
-					label: "Incident Inspection Date",
-					type: "date",
-					origin: "existing",
-					conditionText: "Shown when the future inspection booking question is Yes.",
-					showWhen: { field: "futureBooking", equals: "Yes" }
-				},
-				{ id: "comments", label: "General Comments", type: "textarea", origin: "existing" }
-			]
-		},
-		{
-			name: "Contacts",
-			repeaters: [
-				{
-					id: "contacts",
-					name: "Contact",
-					addText: "+ Contact",
-					origin: "existing",
-					fields: [
-						{ id: "contactSearch", label: "Contact", type: "lookup", lookupOf: "Contact", origin: "existing" }
+						{ id: "requiredAction", label: "Required Action", type: "textarea", origin: "existing" },
+						{ id: "dateRequiredBy", label: "Date Required By", type: "date", origin: "existing" }
 					]
 				}
 			]
@@ -1705,6 +1771,8 @@ window.PESTPLANT_SURVEY = {
 	]
 };
 
+</script>
+	<script>
 /*
 	Shared renderer for the DRSS-4019 mocks.
 	One schema, two surfaces: "desk" (Datascape entity form) and "field" (Fieldwork Data Capture).
@@ -2938,7 +3006,160 @@ window.PESTPLANT_SURVEY = {
 	global.SurveyRenderer = { render, toggleSpec, refresh };
 })(window);
 
-	</script>
+</script>
+	<script>
+(function (global) {
+	function enhance(surface) {
+		const mount = document.getElementById("survey-mount");
+		function labelOf(field) {
+			return field.querySelector(".label-text, .ds-toggle-label")?.textContent.trim();
+		}
+		function adaptFields(root) {
+			const rows = root.matches(".rep-row") ? [root] : root.querySelectorAll(".rep-row");
+			rows.forEach((row) => {
+				if (row.querySelector(".pest-item-title")) return;
+				const name = row.closest(".repeater").querySelector(".repeater-head h4")?.textContent;
+				if (name !== "Pest Plant Inspection Item") return;
+				const heading = document.createElement("h4");
+				heading.className = "pest-item-title";
+				heading.textContent = name;
+				heading.style.margin = "0";
+				row.querySelector(".rep-bar").prepend(heading);
+			});
+			root.querySelectorAll(".field").forEach((field) => {
+				if (field.dataset.pestAdapted) return;
+				field.dataset.pestAdapted = "true";
+				const label = labelOf(field);
+				const help = field.querySelector(".field-help");
+				if (help && help.textContent.trim() === label) {
+					field.querySelector(".label-text, .ds-toggle-label").setAttribute("title", label);
+					help.remove();
+				}
+				field.querySelectorAll("input, select, textarea").forEach((input) => {
+					if (!input.hasAttribute("aria-label") && label) input.setAttribute("aria-label", label);
+				});
+				if (label === "Target species") speciesLookup(field);
+				if (surface !== "desk") return;
+				if (field.classList.contains("field-boolean")) {
+					const row = field.querySelector(".ds-toggle");
+					const button = row?.querySelector(".ds-switch");
+					if (!button) return;
+					button.append(row.querySelector(".ds-toggle-val"));
+					button.setAttribute("role", "switch");
+					button.setAttribute("aria-label", label);
+					button.setAttribute("aria-checked", String(button.classList.contains("on")));
+					button.addEventListener("click", () => {
+						button.setAttribute("aria-checked", String(button.classList.contains("on")));
+					});
+					if (!["Capture Weather?", "Species Found"].includes(label)) {
+						field.classList.add("pest-boolean-stacked");
+						row.before(row.querySelector(".ds-toggle-label"));
+					}
+				}
+				if (field.classList.contains("field-select")) {
+					const choices = field.querySelector(".choice-list, .brick");
+					if (!choices) return;
+					const inputs = [...choices.querySelectorAll("input[type=radio]")];
+					const select = document.createElement("select");
+					select.setAttribute("aria-label", label);
+					select.add(new Option("", ""));
+					inputs.forEach((input) => select.add(new Option(input.value, input.value, false, input.checked)));
+					select.disabled = inputs.every((input) => input.disabled);
+					select.addEventListener("change", () => {
+						const input = inputs.find((candidate) => candidate.value === select.value);
+						if (input) {
+							input.checked = true;
+							input.dispatchEvent(new Event("change", { bubbles: true }));
+						}
+					});
+					choices.hidden = true;
+					choices.after(select);
+				}
+				if (field.classList.contains("field-multiselect")) {
+					const choices = field.querySelector(".choice-list");
+					if (!choices) return;
+					const details = document.createElement("details");
+					details.className = "pest-dropdown";
+					const summary = document.createElement("summary");
+					summary.setAttribute("aria-label", label);
+					function update() {
+						const selected = [...choices.querySelectorAll("input:checked")].map((input) => input.value);
+						summary.textContent = selected.join("; ") || "Select capture methods";
+					}
+					choices.before(details);
+					details.append(summary, choices);
+					choices.addEventListener("change", update);
+					update();
+				}
+			});
+		}
+		function speciesLookup(field) {
+			const input = field.querySelector("input");
+			input.setAttribute("role", "combobox");
+			input.setAttribute("aria-autocomplete", "list");
+			input.setAttribute("aria-expanded", "false");
+			const results = document.createElement("div");
+			results.className = "pest-species-results";
+			results.id = "target-species-results";
+			results.setAttribute("role", "listbox");
+			results.setAttribute("aria-label", "Sample species library");
+			input.setAttribute("aria-controls", results.id);
+			results.hidden = true;
+			const selected = document.createElement("div");
+			selected.className = "pest-species-selected";
+			selected.setAttribute("aria-label", "Selected target species");
+			const selection = new Set();
+			function search() {
+				results.replaceChildren();
+				["Gorse", "Moth plant"].filter((name) => !selection.has(name) && name.toLowerCase().includes(input.value.toLowerCase())).forEach((name) => {
+					const option = document.createElement("button");
+					option.type = "button";
+					option.setAttribute("role", "option");
+					option.setAttribute("aria-selected", "false");
+					option.textContent = name;
+					option.addEventListener("click", () => {
+						selection.add(name);
+						const remove = document.createElement("button");
+						remove.type = "button";
+						remove.textContent = `${name} ×`;
+						remove.setAttribute("aria-label", `Remove ${name}`);
+						remove.addEventListener("click", () => { selection.delete(name); remove.remove(); });
+						selected.append(remove);
+						input.value = "";
+						input.dispatchEvent(new Event("input", { bubbles: true }));
+						close();
+						input.focus();
+					});
+					results.append(option);
+				});
+				results.hidden = false;
+				input.setAttribute("aria-expanded", "true");
+			}
+			function close() { results.hidden = true; input.setAttribute("aria-expanded", "false"); }
+			input.addEventListener("focus", search);
+			input.addEventListener("input", search);
+			input.addEventListener("keydown", (event) => {
+				if (event.key === "Escape") close();
+				if (event.key === "ArrowDown") { event.preventDefault(); search(); results.querySelector("button")?.focus(); }
+			});
+			field.addEventListener("focusout", (event) => { if (!field.contains(event.relatedTarget)) close(); });
+			input.closest(".control").after(results, selected);
+			const note = document.createElement("p");
+			note.className = "spec-note spec-detail";
+			note.textContent = "Prototype sample species only, not a live library connection. RPMP and NPPA status must come from the selected library records; no status values are invented here.";
+			field.append(note);
+		}
+		adaptFields(mount);
+		const observer = new MutationObserver((mutations) => {
+			mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => {
+				if (node.nodeType === Node.ELEMENT_NODE && node.matches(".rep-row")) adaptFields(node);
+			}));
+		});
+		observer.observe(mount, { childList: true, subtree: true });
+	}
+	global.PestPlantPrototype = { enhance };
+})(window);
+</script>
 	<script>
 		SurveyRenderer.render({
 			mount: document.getElementById("survey-mount"),
@@ -2946,6 +3167,7 @@ window.PESTPLANT_SURVEY = {
 			schema: window.PESTPLANT_SURVEY,
 			booleanToggle: true
 		});
+		PestPlantPrototype.enhance("desk");
 		// Initialise from the control so a browser-restored checkbox state cannot
 		// disagree with what is on screen.
 		const specToggle = document.getElementById("spec-toggle");

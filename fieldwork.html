@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>DRSS-1540 Pest Plant Inspection · Fieldwork</title>
+	<title>DRSS-1540 Pest Plant Inspection · Fieldwork · v4</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet" />
@@ -1252,17 +1252,20 @@ body.record .rec-info {
 	font-size: 11px; font-weight: 700; font-style: italic;
 	display: inline-flex; align-items: center; justify-content: center;
 }
-body.record .rec-tools { display: flex; align-items: center; gap: 10px; color: #5c5c66; font-size: 14px; }
-body.record .rec-complete {
-	background: #3a3a3a;
-	color: #fff;
+body.record .rec-tools { display: flex; align-items: center; justify-content: flex-end; color: #1b2744; }
+body.record .rec-actions { display: flex; align-items: center; gap: 16px; padding: 8px 0 0; color: #1b2744; }
+body.record .rec-actions button {
 	border: 0;
-	border-radius: 4px;
-	padding: 6px 12px;
-	font-size: 12px;
-	font-weight: 700;
+	background: none;
+	padding: 0;
+	color: inherit;
 	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1px;
 }
+body.record .rec-actions button:focus-visible { outline: 2px solid var(--ds-focus-border); outline-offset: 2px; }
 body.record .rec-identity {
 	display: flex;
 	align-items: flex-end;
@@ -1342,6 +1345,15 @@ body.record .add { color: var(--shallow-blue); border-color: var(--shallow-blue)
 .ds-toggle-val { color: #00bce2; font-size: 12px; font-weight: 700; min-width: 18px; }
 .ds-toggle-label { font-size: 13px; color: #1c1c1d; }
 
+</style>
+	<style>
+	.pest-species-results { display: flex; flex-direction: column; border: 1px solid var(--field-border); max-height: 180px; overflow: auto; }
+	.pest-species-results[hidden] { display: none; }
+	.pest-species-results button { text-align: left; background: white; border: 0; padding: 12px; cursor: pointer; color: var(--deep-blue); font-size: 15px; }
+	.pest-species-results button:hover, .pest-species-results button:focus { background: var(--indigo-wash); }
+	.pest-species-selected { display: flex; flex-wrap: wrap; gap: 6px; }
+	.pest-species-selected:empty { display: none; }
+	.pest-species-selected button { border: 1px solid var(--indigo-mid); background: var(--indigo-wash); color: var(--deep-blue); border-radius: 4px; padding: 8px; cursor: pointer; font-size: 15px; }
 	</style>
 </head>
 <body class="field">
@@ -1385,8 +1397,8 @@ body.record .add { color: var(--shallow-blue); border-color: var(--shallow-blue)
 	DRSS-1540 Pest Plant Inspection.
 
 	The survey is already built in Datascape. This prototype follows that form,
-	as shown on surveys 7802 and 8414, plus the four changes in Halema Jamieson's
-	comment on 28 October 2026. It does not rebuild the April layout.
+	as shown on surveys 7802 and 8414, plus the four changes in Halema's
+	instruction supplied with this request. It does not rebuild the April layout.
 
 	The four changes:
 		1. Pest Plant Inspection Actions — title and help text of Incident Inspection Required
@@ -1402,11 +1414,11 @@ body.record .add { color: var(--shallow-blue); border-color: var(--shallow-blue)
 */
 window.PESTPLANT_SURVEY = {
 	meta: {
-		docTitle: "DRSS-1540 Pest Plant Inspection",
+		docTitle: "DRSS-1540 Pest Plant Inspection · v4",
 		jira: "DRSS-1540",
 		jiraUrl: "https://datacomgroup.atlassian.net/browse/DRSS-1540",
-		surveyType: "Pest Plant Infestation Inspection",
-		shortCode: "SVINF.3312",
+		surveyType: "Pest Plant Inspection",
+		shortCode: "DSCREGBiosecurityPestPlantInspection.8414",
 		job: "Pest Plant Inspection",
 		property: "Pest Plant Inspection - 7802",
 		officer: "H. Giles",
@@ -1415,7 +1427,7 @@ window.PESTPLANT_SURVEY = {
 		readerNotes: [
 			{
 				heading: "This is the survey already built.",
-				text: "Halema Jamieson, 28 October 2026: do not rebuild the survey. The form below is the one that was tested. Only the four marked changes are new."
+				text: "Halema's supplied instruction: do not rebuild the survey. The form follows the supplied screenshots and exported configuration. Only the four marked changes are new. Example values are illustrative, not defaults or a live record."
 			},
 			{
 				heading: "The yellow row is Target species.",
@@ -1425,22 +1437,23 @@ window.PESTPLANT_SURVEY = {
 	},
 	parts: [
 		{
-			name: "Weather",
-			fields: [
+			name: "Survey Detail",
+			sections: [{
+				name: "Weather",
+				fields: [
 				{ id: "captureWeather", label: "Capture Weather?", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" }
-			]
-		},
-		{
+				]
+			}, {
 			name: "In Attendance",
 			fields: [
 				{ id: "inAttendance", label: "In Attendance", type: "textarea", origin: "existing" }
 			]
-		},
-		{
+			}, {
 			name: "Authority",
 			fields: [
 				{ id: "warrantShown", label: "Warrant Shown", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" }
 			]
+			}]
 		},
 		{
 			name: "Pest Plant Inspection",
@@ -1453,7 +1466,7 @@ window.PESTPLANT_SURVEY = {
 						"Proactive Surveillance",
 						"Enquiry or Request",
 						"Complaint",
-						"Reinspection",
+						"Re-inspection",
 						"Nursery Inspection"
 					],
 					value: "Enquiry or Request",
@@ -1465,7 +1478,8 @@ window.PESTPLANT_SURVEY = {
 					type: "multilookup",
 					lookupOf: "Species",
 					origin: "new",
-					detail: "The yellow row in the April layout. Species library, more than one species. Sits after Reason for Inspection and before Property Inspected."
+					detail: "April spreadsheet, Pest Plant Inspection row 30 (yellow): multi-select Species library lookup. Show species name, RPMP and NPPA status. Placed after Reason for Inspection and before Property Inspected.",
+					mapsTo: "Species library records; retain their species name, RPMP and NPPA status."
 				},
 				{
 					id: "propertyInspected",
@@ -1475,6 +1489,10 @@ window.PESTPLANT_SURVEY = {
 					value: "Yes",
 					mandatory: true,
 					origin: "existing"
+				},
+				{
+					id: "propertyNotInspectedReason", label: "Reason", type: "text", origin: "existing", mandatory: true,
+					showWhen: { field: "propertyInspected", equals: "No" }
 				},
 				{
 					id: "areaSearched",
@@ -1495,8 +1513,44 @@ window.PESTPLANT_SURVEY = {
 			]
 		},
 		{
+			name: "Pest Plant Inspection Actions",
+			fields: [
+				{ id: "advice", label: "Advice and Information", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" },
+				{ id: "noticeLeft", label: "Entry Advice Notice Left?", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" },
+				{ id: "noticePhoto", label: "Entry Advice Notice Photo", type: "media", media: "photo", origin: "existing", showWhen: { field: "noticeLeft", equals: "Yes" } },
+				{ id: "overallCompliance", label: "Overall Inspection Compliance Status", type: "readonly", value: "Non-compliant", origin: "existing", detail: "Calculated by the existing survey. This prototype shows an illustrative result and does not replace the live calculation." },
+				{
+					id: "futureBooking",
+					label: "Do you want to create a future inspection booking on the incident?",
+					help: "Do you want to create a future inspection booking on the incident?",
+					type: "boolean", options: ["Yes", "No"], value: "No", origin: "wording",
+					detail: "Only the existing title and help text change. The existing booking and date behaviour is retained.",
+					showWhen: { any: [{ field: "overallCompliance", equals: "Compliant at end of Inspection" }, { field: "overallCompliance", equals: "Non-compliant" }] }
+				},
+				{ id: "incidentDate", label: "Incident Inspection Date", type: "date", origin: "existing", mandatory: true, showWhen: { field: "futureBooking", equals: "Yes" } },
+				{ id: "comments", label: "General Comments", type: "textarea", origin: "existing" }
+			]
+		},
+		{
+			name: "Contacts",
+			repeaters: [{
+				id: "contacts", name: "Contact", addText: "+ Contact", origin: "existing",
+				fields: [
+					{ id: "contactSearch", label: "Contact", type: "lookup", lookupOf: "Contact", origin: "existing" },
+					{ id: "relationshipType", label: "Relationship Type", type: "lookup", lookupOf: "Relationship Type", origin: "existing" },
+					{ id: "dateOfBirth", label: "Date of Birth", type: "date", origin: "existing", showWhen: { field: "relationshipType", equals: "Alleged Offender" } }
+				]
+			}]
+		},
+		{
 			name: "Infestation Details",
-			sections: [
+			repeaters: [{
+				id: "infestationDetails",
+				name: "Pest Plant Inspection Item",
+				addText: "+ Infestation Detail",
+				origin: "existing",
+				showWhen: { field: "speciesFound", equals: "Yes" },
+				sections: [
 				{
 					name: "Infestation Species",
 					fields: [
@@ -1524,6 +1578,16 @@ window.PESTPLANT_SURVEY = {
 					]
 				},
 				{
+					name: "Pest Plant Infestation Fine Scale Point",
+					showWhen: { field: "captureMethod", includes: "Pest Plant Infestation (Fine Scale Point)" },
+					fields: [{ id: "infestFineScalePoint", label: "Pest Plant Infestation (Fine Scale Point)", type: "spatial", geometry: "Fine Scale Point", origin: "existing" }]
+				},
+				{
+					name: "Pest Plant Infestation Polygon",
+					showWhen: { field: "captureMethod", includes: "Pest Plant Infestation (Polygon)" },
+					fields: [{ id: "infestPolygon", label: "Pest Plant Infestation (Polygon)", type: "spatial", geometry: "Polygon", origin: "existing" }]
+				},
+				{
 					name: "Pest Plant Infestation Point",
 					conditionText: "Shown when Capture Method includes Pest Plant Infestation (Point).",
 					showWhen: { field: "captureMethod", includes: "Pest Plant Infestation (Point)" },
@@ -1545,10 +1609,8 @@ window.PESTPLANT_SURVEY = {
 							detail: "A Yes/No on the infestation location, as on the current survey. It is not its own pin."
 						}
 					]
-				}
-			]
-		},
-		{
+				},
+			{
 			name: "Control",
 			fields: [
 				{
@@ -1585,10 +1647,15 @@ window.PESTPLANT_SURVEY = {
 					type: "select",
 					options: ["Compliant", "Compliant at end of Inspection", "Non-compliant"],
 					value: "Non-compliant",
-					origin: "existing"
+					origin: "existing",
+					showWhen: { field: "responsibility", equals: "Occupier Led" }
 				},
-				{ id: "ruleBreached", label: "Rule Breached", type: "text", origin: "existing" }
+				{ id: "ruleBreached", label: "Rule Breached", type: "text", origin: "existing", showWhen: { all: [{ field: "responsibility", equals: "Occupier Led" }, { field: "complianceStatus", equals: "Non-compliant" }] } },
+				{ id: "createPlacePlan", label: "Create Place Plan", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing", showWhen: { any: [{ field: "responsibility", equals: "Council Control" }, { field: "responsibility", equals: "Other Weed" }] } }
 			]
+			}
+				]
+			}]
 		},
 		{
 			name: "Further Actions",
@@ -1599,69 +1666,8 @@ window.PESTPLANT_SURVEY = {
 					addText: "+ Further Action",
 					origin: "existing",
 					fields: [
-						{ id: "requiredAction", label: "Required Action", type: "textarea", origin: "existing" }
-					]
-				}
-			]
-		},
-		{
-			name: "Pest Plant Inspection Actions",
-			fields: [
-				{
-					id: "advice",
-					label: "Advice and Information",
-					type: "boolean",
-					options: ["Yes", "No"],
-					value: "No",
-					origin: "existing"
-				},
-				{
-					id: "noticeLeft",
-					label: "Entry Advice Notice Left?",
-					type: "boolean",
-					options: ["Yes", "No"],
-					value: "No",
-					origin: "existing"
-				},
-				{
-					id: "overallCompliance",
-					label: "Overall Inspection Compliance Status",
-					type: "select",
-					options: ["Compliant", "Compliant at end of Inspection", "Non-compliant"],
-					value: "Compliant at end of Inspection",
-					origin: "existing"
-				},
-				{
-					id: "futureBooking",
-					label: "Do you want to create a future inspection booking on the incident?",
-					help: "Do you want to create a future inspection booking on the incident?",
-					type: "boolean",
-					options: ["Yes", "No"],
-					value: "No",
-					origin: "wording",
-					detail: "The current title is Incident Inspection Required. The current help text is “Automatically create a Booking for the Incident Record created”. Both now read as the question above."
-				},
-				{
-					id: "incidentDate",
-					label: "Incident Inspection Date",
-					type: "date",
-					origin: "existing",
-					conditionText: "Shown when the future inspection booking question is Yes.",
-					showWhen: { field: "futureBooking", equals: "Yes" }
-				},
-				{ id: "comments", label: "General Comments", type: "textarea", origin: "existing" }
-			]
-		},
-		{
-			name: "Contacts",
-			repeaters: [
-				{
-					id: "contacts",
-					name: "Contact",
-					addText: "+ Contact",
-					origin: "existing",
-					fields: [
-						{ id: "contactSearch", label: "Contact", type: "lookup", lookupOf: "Contact", origin: "existing" }
+						{ id: "requiredAction", label: "Required Action", type: "textarea", origin: "existing" },
+						{ id: "dateRequiredBy", label: "Date Required By", type: "date", origin: "existing" }
 					]
 				}
 			]
@@ -1669,6 +1675,8 @@ window.PESTPLANT_SURVEY = {
 	]
 };
 
+</script>
+	<script>
 /*
 	Shared renderer for the DRSS-4019 mocks.
 	One schema, two surfaces: "desk" (Datascape entity form) and "field" (Fieldwork Data Capture).
@@ -2902,13 +2910,167 @@ window.PESTPLANT_SURVEY = {
 	global.SurveyRenderer = { render, toggleSpec, refresh };
 })(window);
 
-	</script>
+</script>
+	<script>
+(function (global) {
+	function enhance(surface) {
+		const mount = document.getElementById("survey-mount");
+		function labelOf(field) {
+			return field.querySelector(".label-text, .ds-toggle-label")?.textContent.trim();
+		}
+		function adaptFields(root) {
+			const rows = root.matches(".rep-row") ? [root] : root.querySelectorAll(".rep-row");
+			rows.forEach((row) => {
+				if (row.querySelector(".pest-item-title")) return;
+				const name = row.closest(".repeater").querySelector(".repeater-head h4")?.textContent;
+				if (name !== "Pest Plant Inspection Item") return;
+				const heading = document.createElement("h4");
+				heading.className = "pest-item-title";
+				heading.textContent = name;
+				heading.style.margin = "0";
+				row.querySelector(".rep-bar").prepend(heading);
+			});
+			root.querySelectorAll(".field").forEach((field) => {
+				if (field.dataset.pestAdapted) return;
+				field.dataset.pestAdapted = "true";
+				const label = labelOf(field);
+				const help = field.querySelector(".field-help");
+				if (help && help.textContent.trim() === label) {
+					field.querySelector(".label-text, .ds-toggle-label").setAttribute("title", label);
+					help.remove();
+				}
+				field.querySelectorAll("input, select, textarea").forEach((input) => {
+					if (!input.hasAttribute("aria-label") && label) input.setAttribute("aria-label", label);
+				});
+				if (label === "Target species") speciesLookup(field);
+				if (surface !== "desk") return;
+				if (field.classList.contains("field-boolean")) {
+					const row = field.querySelector(".ds-toggle");
+					const button = row?.querySelector(".ds-switch");
+					if (!button) return;
+					button.append(row.querySelector(".ds-toggle-val"));
+					button.setAttribute("role", "switch");
+					button.setAttribute("aria-label", label);
+					button.setAttribute("aria-checked", String(button.classList.contains("on")));
+					button.addEventListener("click", () => {
+						button.setAttribute("aria-checked", String(button.classList.contains("on")));
+					});
+					if (!["Capture Weather?", "Species Found"].includes(label)) {
+						field.classList.add("pest-boolean-stacked");
+						row.before(row.querySelector(".ds-toggle-label"));
+					}
+				}
+				if (field.classList.contains("field-select")) {
+					const choices = field.querySelector(".choice-list, .brick");
+					if (!choices) return;
+					const inputs = [...choices.querySelectorAll("input[type=radio]")];
+					const select = document.createElement("select");
+					select.setAttribute("aria-label", label);
+					select.add(new Option("", ""));
+					inputs.forEach((input) => select.add(new Option(input.value, input.value, false, input.checked)));
+					select.disabled = inputs.every((input) => input.disabled);
+					select.addEventListener("change", () => {
+						const input = inputs.find((candidate) => candidate.value === select.value);
+						if (input) {
+							input.checked = true;
+							input.dispatchEvent(new Event("change", { bubbles: true }));
+						}
+					});
+					choices.hidden = true;
+					choices.after(select);
+				}
+				if (field.classList.contains("field-multiselect")) {
+					const choices = field.querySelector(".choice-list");
+					if (!choices) return;
+					const details = document.createElement("details");
+					details.className = "pest-dropdown";
+					const summary = document.createElement("summary");
+					summary.setAttribute("aria-label", label);
+					function update() {
+						const selected = [...choices.querySelectorAll("input:checked")].map((input) => input.value);
+						summary.textContent = selected.join("; ") || "Select capture methods";
+					}
+					choices.before(details);
+					details.append(summary, choices);
+					choices.addEventListener("change", update);
+					update();
+				}
+			});
+		}
+		function speciesLookup(field) {
+			const input = field.querySelector("input");
+			input.setAttribute("role", "combobox");
+			input.setAttribute("aria-autocomplete", "list");
+			input.setAttribute("aria-expanded", "false");
+			const results = document.createElement("div");
+			results.className = "pest-species-results";
+			results.id = "target-species-results";
+			results.setAttribute("role", "listbox");
+			results.setAttribute("aria-label", "Sample species library");
+			input.setAttribute("aria-controls", results.id);
+			results.hidden = true;
+			const selected = document.createElement("div");
+			selected.className = "pest-species-selected";
+			selected.setAttribute("aria-label", "Selected target species");
+			const selection = new Set();
+			function search() {
+				results.replaceChildren();
+				["Gorse", "Moth plant"].filter((name) => !selection.has(name) && name.toLowerCase().includes(input.value.toLowerCase())).forEach((name) => {
+					const option = document.createElement("button");
+					option.type = "button";
+					option.setAttribute("role", "option");
+					option.setAttribute("aria-selected", "false");
+					option.textContent = name;
+					option.addEventListener("click", () => {
+						selection.add(name);
+						const remove = document.createElement("button");
+						remove.type = "button";
+						remove.textContent = `${name} ×`;
+						remove.setAttribute("aria-label", `Remove ${name}`);
+						remove.addEventListener("click", () => { selection.delete(name); remove.remove(); });
+						selected.append(remove);
+						input.value = "";
+						input.dispatchEvent(new Event("input", { bubbles: true }));
+						close();
+						input.focus();
+					});
+					results.append(option);
+				});
+				results.hidden = false;
+				input.setAttribute("aria-expanded", "true");
+			}
+			function close() { results.hidden = true; input.setAttribute("aria-expanded", "false"); }
+			input.addEventListener("focus", search);
+			input.addEventListener("input", search);
+			input.addEventListener("keydown", (event) => {
+				if (event.key === "Escape") close();
+				if (event.key === "ArrowDown") { event.preventDefault(); search(); results.querySelector("button")?.focus(); }
+			});
+			field.addEventListener("focusout", (event) => { if (!field.contains(event.relatedTarget)) close(); });
+			input.closest(".control").after(results, selected);
+			const note = document.createElement("p");
+			note.className = "spec-note spec-detail";
+			note.textContent = "Prototype sample species only, not a live library connection. RPMP and NPPA status must come from the selected library records; no status values are invented here.";
+			field.append(note);
+		}
+		adaptFields(mount);
+		const observer = new MutationObserver((mutations) => {
+			mutations.forEach((mutation) => mutation.addedNodes.forEach((node) => {
+				if (node.nodeType === Node.ELEMENT_NODE && node.matches(".rep-row")) adaptFields(node);
+			}));
+		});
+		observer.observe(mount, { childList: true, subtree: true });
+	}
+	global.PestPlantPrototype = { enhance };
+})(window);
+</script>
 	<script>
 		SurveyRenderer.render({
 			mount: document.getElementById("survey-mount"),
 			surface: "field",
 			schema: window.PESTPLANT_SURVEY
 		});
+		PestPlantPrototype.enhance("field");
 		// Initialise from the control so a browser-restored checkbox state cannot
 		// disagree with what is on screen.
 		const specToggle = document.getElementById("spec-toggle");
