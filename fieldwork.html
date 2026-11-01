@@ -3048,10 +3048,6 @@ window.PESTPLANT_SURVEY = {
 			});
 			field.addEventListener("focusout", (event) => { if (!field.contains(event.relatedTarget)) close(); });
 			input.closest(".control").after(results, selected);
-			const note = document.createElement("p");
-			note.className = "spec-note spec-detail";
-			note.textContent = "Prototype sample species only, not a live library connection. RPMP and NPPA status must come from the selected library records; no status values are invented here.";
-			field.append(note);
 		}
 		adaptFields(mount);
 		const observer = new MutationObserver((mutations) => {
