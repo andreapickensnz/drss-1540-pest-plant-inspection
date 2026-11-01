@@ -1451,7 +1451,15 @@ window.PESTPLANT_SURVEY = {
 			}, {
 			name: "Authority",
 			fields: [
-				{ id: "warrantShown", label: "Warrant Shown", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" }
+				{ id: "warrantShown", label: "Warrant Shown", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing", detail: "Existing Yes behaviour is retained: Warrant Number, recipient Contact lookup, recipient free-text name and recipient Relationship Type." },
+				{ id: "warrantNumber", label: "Warrant Number", type: "text", origin: "existing", showWhen: { field: "warrantShown", equals: "Yes" } },
+				{ id: "warrantContact", label: "Warrant Shown to Name", type: "lookup", lookupOf: "Contact", origin: "existing", detail: "Existing single Contact lookup. The separate free-text name field below is also retained.", showWhen: { field: "warrantShown", equals: "Yes" } },
+				{ id: "warrantRecipientName", label: "Warrant Shown to Name", type: "text", origin: "existing", showWhen: { field: "warrantShown", equals: "Yes" } },
+				{
+					id: "warrantRelationship", label: "Warrant Shown to Relationship Type", type: "select", origin: "existing",
+					options: ["Associated Landowner", "Authorisation Holder", "Alleged Offender", "Community Group", "Environmental Manager", "Farm Manager", "Iwi Hapu Groups", "Key Decision Maker(KDM)", "Leaseholder", "Lessee", "Occupier", "Plan Contact", "Plan Holder", "Property Owner", "Sharemilker", "Site Contact", "Territorial Authority", "Applicant", "Applicant Contact", "Manager", "Affected Party", "Consultant", "Consultant Engineer", "Contractor", "Council Lawyer", "Dam Owner", "Defence Lawyer", "Judge", "Landowner", "Law Firm", "Offender", "Prosecutor", "Recognised Engineer", "Reporter", "Witness"],
+					showWhen: { field: "warrantShown", equals: "Yes" }
+				}
 			]
 			}]
 		},
@@ -1515,9 +1523,12 @@ window.PESTPLANT_SURVEY = {
 		{
 			name: "Pest Plant Inspection Actions",
 			fields: [
-				{ id: "advice", label: "Advice and Information", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" },
-				{ id: "noticeLeft", label: "Entry Advice Notice Left?", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" },
-				{ id: "noticePhoto", label: "Entry Advice Notice Photo", type: "media", media: "photo", origin: "existing", showWhen: { field: "noticeLeft", equals: "Yes" } },
+				{ id: "advice", label: "Advice and Information", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing", detail: "Existing Yes behaviour is retained: show Information Given." },
+				{ id: "informationGiven", label: "Information Given", type: "textarea", origin: "existing", showWhen: { field: "advice", equals: "Yes" } },
+				{ id: "noticeLeft", label: "Entry Advice Notice Left?", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing", detail: "Existing Yes behaviour is retained: Notice Number, Where was it left? and Entry Advice Notice Photo. Multiple photo attachments remain supported by the existing survey." },
+				{ id: "noticeNumber", label: "Notice Number", type: "text", origin: "existing", showWhen: { field: "noticeLeft", equals: "Yes" } },
+				{ id: "noticeLocation", label: "Where was it left?", type: "text", origin: "existing", showWhen: { field: "noticeLeft", equals: "Yes" } },
+				{ id: "noticePhoto", label: "Entry Advice Notice Photo", type: "media", media: "photo", origin: "existing", detail: "Existing multiple-photo attachment field.", showWhen: { field: "noticeLeft", equals: "Yes" } },
 				{ id: "overallCompliance", label: "Overall Inspection Compliance Status", type: "readonly", value: "Non-compliant", origin: "existing", detail: "Calculated by the existing survey. This prototype shows an illustrative result and does not replace the live calculation." },
 				{
 					id: "futureBooking",
