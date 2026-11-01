@@ -1634,7 +1634,7 @@ window.PESTPLANT_SURVEY = {
 				fields: [
 					{ id: "contactSearch", label: "Contact", type: "lookup", lookupOf: "Contact", origin: "existing" },
 					{ id: "relationshipType", label: "Relationship Type", type: "lookup", lookupOf: "Relationship Type", origin: "existing" },
-					{ id: "dateOfBirth", label: "Date of Birth", type: "date", origin: "existing", showWhen: { field: "relationshipType", equals: "Alleged Offender" } }
+					{ id: "dateOfBirth", label: "Date of Birth", type: "date", origin: "existing", conditionText: "Shown and enabled only when this contact's Relationship Type is Alleged Offender. In this prototype, enter Alleged Offender exactly in Relationship Type to enable Date of Birth.", showWhen: { field: "relationshipType", equals: "Alleged Offender" } }
 				]
 			}]
 		},
