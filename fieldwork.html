@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>DRSS-1540 Pest Plant Inspection · Fieldwork · v4</title>
+	<title>DRSS-1540 Pest Plant Inspection · Fieldwork · v5</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet" />
@@ -1414,7 +1414,7 @@ body.record .add { color: var(--shallow-blue); border-color: var(--shallow-blue)
 */
 window.PESTPLANT_SURVEY = {
 	meta: {
-		docTitle: "DRSS-1540 Pest Plant Inspection · v4",
+		docTitle: "DRSS-1540 Pest Plant Inspection · v5",
 		jira: "DRSS-1540",
 		jiraUrl: "https://datacomgroup.atlassian.net/browse/DRSS-1540",
 		surveyType: "Pest Plant Inspection",
@@ -1441,7 +1441,13 @@ window.PESTPLANT_SURVEY = {
 			sections: [{
 				name: "Weather",
 				fields: [
-				{ id: "captureWeather", label: "Capture Weather?", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" }
+				{ id: "captureWeather", label: "Capture Weather?", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing" },
+				{ id: "airTemperature", label: "Air Temperature", type: "select", options: ["Hot (above 28 degrees)", "Warm (15-28 degrees)", "Cool (10-15 degrees)", "Cold (0-10 degrees)", "Freezing (<0 degrees)"], origin: "existing", showWhen: { field: "captureWeather", equals: "Yes" } },
+				{ id: "cloudCover", label: "Cloud Cover", type: "select", options: ["0/8", "1/8", "2/8", "3/8", "4/8", "5/8", "6/8", "7/8", "8/8"], origin: "existing", showWhen: { field: "captureWeather", equals: "Yes" } },
+				{ id: "rainfall", label: "Rainfall", type: "select", options: ["Medium", "Heavy", "Light"], origin: "existing", showWhen: { field: "captureWeather", equals: "Yes" } },
+				{ id: "windDirection", label: "Wind Direction", type: "select", options: ["E", "N", "NE", "NW", "S", "SE", "SW", "W"], origin: "existing", showWhen: { field: "captureWeather", equals: "Yes" } },
+				{ id: "windStrength", label: "Wind Strength", type: "select", options: ["Medium", "Light", "Strong"], origin: "existing", showWhen: { field: "captureWeather", equals: "Yes" } },
+				{ id: "otherWeatherConditions", label: "Other Weather Conditions", type: "select", options: ["Fog", "Inversion Layer", "High Humidity (>90%)"], origin: "existing", showWhen: { field: "captureWeather", equals: "Yes" } }
 				]
 			}, {
 			name: "In Attendance",
