@@ -1537,8 +1537,7 @@ window.PESTPLANT_SURVEY = {
 			}, {
 			name: "Authority",
 			fields: [
-				{ id: "warrantShown", label: "Warrant Shown", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing", detail: "Warrant Number, recipient Contact lookup and recipient Relationship Type remain conditional on Yes." },
-				{ id: "warrantNumber", label: "Warrant Number", type: "text", origin: "existing", showWhen: { field: "warrantShown", equals: "Yes" } },
+				{ id: "warrantShown", label: "Warrant Shown", type: "boolean", options: ["Yes", "No"], value: "No", origin: "existing", detail: "Recipient name and relationship fields are shown when Warrant Shown is Yes." },
 				{ id: "warrantContact", label: "Warrant Shown to Name", type: "lookup", lookupOf: "Contact", origin: "existing", detail: "Existing single Contact lookup. The separate free-text name field below is also retained.", showWhen: { field: "warrantShown", equals: "Yes" } },
 				{ id: "warrantRecipientName", label: "Warrant Shown to Name (enter a name if contact is not found)", type: "text", conditionText: "IF Warrant Shown = Yes", showWhen: { field: "warrantShown", equals: "Yes" }, origin: "existing" },
 				{
